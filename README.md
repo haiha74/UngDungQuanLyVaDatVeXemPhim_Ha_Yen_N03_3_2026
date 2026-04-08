@@ -2,8 +2,8 @@
 # QuanLyRapChieuPhim_Ha_Yen_N03_3_2026
 
 ## Thành viên nhóm 
-* Nguyễn hải Hà - 23010469
-* Vũ Thị Hải Yến - 23010421
+* Nguyễn Hải Hà - 23010469
+* Vũ Thị Hải Yến - 23011421
 
 ## Bài thực hành 01 
 ### 1. Tạo repo nhóm 
