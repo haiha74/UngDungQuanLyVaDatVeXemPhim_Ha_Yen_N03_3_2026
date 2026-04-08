@@ -3,7 +3,7 @@
 
 ## Thành viên nhóm 
 * Nguyễn Hải Hà - 23010469
-* Vũ Thị Hải Yến - 23011421
+* Vũ Thị Hải Yến - 23010421
 
 ## Bài thực hành 01 
 ### 1. Tạo repo nhóm 
