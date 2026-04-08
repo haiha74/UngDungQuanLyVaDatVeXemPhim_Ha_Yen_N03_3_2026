@@ -1,6 +1,6 @@
 # QuanLyRapChieuPhim_Ha_Yen_N03_3_2026
 ##  Thành viên nhóm
-https://github.com/haiha74/QuanLyRapChieuPhim_Ha_Yen_N03_3_2026
+
 * Nguyễn Hải Hà - 23010469
 * Vũ Thị Hải Yến - 23010421
 
