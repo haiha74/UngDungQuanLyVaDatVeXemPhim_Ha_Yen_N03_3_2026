@@ -126,7 +126,7 @@ class AboutPage extends StatelessWidget {
         children: [
           AppCommon.header(),
           heroForm(),
-          aboutContent(),
+
           AppCommon.footer(),
         ],
       ),
