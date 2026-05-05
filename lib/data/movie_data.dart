@@ -23,4 +23,28 @@ final List<Map<String, dynamic>> movies = [
     'posterUrl': 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba',
     'status': 'NOW_SHOWING',
   },
+  {
+    'movieId': 4,
+    'title': 'Inside Out 2',
+    'description': 'Câu chuyện cảm xúc mới trong thế giới tuổi trưởng thành.',
+    'runtime': 96,
+    'posterUrl': 'https://images.unsplash.com/photo-1478720568477-152d9b164e26',
+    'status': 'NOW_SHOWING',
+  },
+  {
+    'movieId': 5,
+    'title': 'Godzilla x Kong',
+    'description': 'Cuộc chiến hoành tráng giữa các quái vật khổng lồ.',
+    'runtime': 115,
+    'posterUrl': 'https://images.unsplash.com/photo-1505686994434-e3cc5abf1330',
+    'status': 'NOW_SHOWING',
+  },
+  {
+    'movieId': 6,
+    'title': 'The Batman',
+    'description': 'Hành trình điều tra tội phạm tại thành phố Gotham.',
+    'runtime': 176,
+    'posterUrl': 'https://images.unsplash.com/photo-1485846234645-a62644f84728',
+    'status': 'COMING_SOON',
+  },
 ];

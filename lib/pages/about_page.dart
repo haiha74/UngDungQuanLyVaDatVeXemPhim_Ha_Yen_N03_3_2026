@@ -8,7 +8,7 @@ class AboutPage extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 70),
-      color: const Color(0xfff2f2f2),
+      color: AppCommon.bgColor,
       child: Center(
         child: SizedBox(
           width: 360,
@@ -16,61 +16,58 @@ class AboutPage extends StatelessWidget {
             children: [
               const Text(
                 'About Web Cine',
-                style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              const Text('Project information'),
-              const SizedBox(height: 24),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Column(
-                    children: const [
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Project Name',
-                          hintText: 'Web Cine',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Student Name',
-                          hintText: 'Nguyen Hai Ha',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'University',
-                          hintText: 'Phenikaa University',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      TextField(
-                        maxLines: 3,
-                        decoration: InputDecoration(
-                          labelText: 'Message',
-                          hintText: 'Java Web chuyển sang Flutter App',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ],
-                  ),
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xff222222),
                 ),
               ),
-              const SizedBox(height: 12),
-              SizedBox(
+              const SizedBox(height: 10),
+              const Text(
+                'Project Information',
+                style: TextStyle(fontSize: 22, color: Color(0xff333333)),
+              ),
+              const SizedBox(height: 30),
+
+              // KHUNG FORM GIỐNG ẢNH
+              Container(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: null,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.black),
-                  ),
-                  child: Text('Submit'),
+                padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: const Color(0xffd8d8d8)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  children: [
+                    const _Input(label: 'Project Name', hint: 'Web Cine'),
+                    const SizedBox(height: 22),
+                    const _Input(label: 'Student Name', hint: 'Nguyen Hai Ha - Vu Thi Hai Yen'),
+                    const SizedBox(height: 22),
+                    const _Input(label: 'University', hint: 'Phenikaa University'),
+                    const SizedBox(height: 22),
+                    const _Input(
+                      label: 'Message',
+                      hint: 'Flutter App',
+                      maxLines: 4,
+                    ),
+                    const SizedBox(height: 24),
+
+                    // BUTTON NẰM TRONG KHUNG
+                    Container(
+                      width: double.infinity,
+                      height: 46,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff2b2b2b),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'Submit',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -82,25 +79,42 @@ class AboutPage extends StatelessWidget {
 
   Widget aboutContent() {
     return Padding(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(36),
       child: Column(
         children: [
           _infoRow('Project', 'Web Cine - Quản lý rạp chiếu phim'),
-          _infoRow('Technology', 'Java Web chuyển dần sang Flutter App'),
+          _infoRow('Technology', 'Flutter App'),
           _infoRow('Main Object', 'Movie, Showtime, Booking, Payment, User'),
-          _infoRow('Student', 'Nguyen Hai Ha'),
+          _infoRow('Student', 'Nguyen Hai Ha - Vu Thi Hai Yen'),
         ],
       ),
     );
   }
 
   Widget _infoRow(String title, String content) {
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 14),
-      child: ListTile(
-        leading: const Icon(Icons.info_outline),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(content),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: AppCommon.borderColor),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.info_outline, size: 26),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Text(content),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -116,6 +130,54 @@ class AboutPage extends StatelessWidget {
           AppCommon.footer(),
         ],
       ),
+    );
+  }
+}
+
+class _Input extends StatelessWidget {
+  final String label;
+  final String hint;
+  final int maxLines;
+
+  const _Input({
+    required this.label,
+    required this.hint,
+    this.maxLines = 1,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Color(0xff222222),
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: const TextStyle(color: Color(0xffb5b5b5)),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 14,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0xffd8d8d8)),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0xff999999)),
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
