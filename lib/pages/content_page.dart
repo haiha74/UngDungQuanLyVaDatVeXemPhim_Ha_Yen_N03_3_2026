@@ -112,7 +112,7 @@ class ContentPage extends StatelessWidget {
 
   Widget movieGrid() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(36, 42, 36, 52),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isMobile = constraints.maxWidth < 700;
@@ -123,44 +123,55 @@ class ContentPage extends StatelessWidget {
             itemCount: movies.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: isMobile ? 1 : 3,
-              crossAxisSpacing: 28,
-              mainAxisSpacing: 28,
-              childAspectRatio: isMobile ? 1.6 : 0.9,
+              crossAxisSpacing: 18,
+              mainAxisSpacing: 18,
+
+              // Số càng lớn thì card càng thấp
+              childAspectRatio: isMobile ? 2.2 : 1.75,
             ),
             itemBuilder: (context, index) {
               final movie = movies[index];
 
               return Container(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: AppCommon.borderColor),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(6),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Image.network(
-                        movie['posterUrl'],
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                    SizedBox(
+                      height: isMobile ? 120 : 130,
+                      width: double.infinity,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.network(
+                          movie['posterUrl'],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Text(
                       movie['title'],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 4),
                     Text(
                       movie['description'],
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 13),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),

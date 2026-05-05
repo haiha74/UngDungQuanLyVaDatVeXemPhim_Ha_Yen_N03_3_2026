@@ -30,7 +30,15 @@ class _WebCineAppState extends State<WebCineApp> {
       title: 'Web Cine',
       home: Scaffold(
         backgroundColor: const Color(0xfff8eef8),
-        body: pages[currentIndex],
+        body: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Center(
+            child: SizedBox(
+              width: 1200,
+              child: pages[currentIndex],
+            ),
+          ),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
           selectedItemColor: Colors.deepPurple,

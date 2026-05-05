@@ -118,50 +118,92 @@ class AppCommon {
   static Widget footer() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 36),
+      padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 36),
       color: Colors.white,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isMobile = constraints.maxWidth < 700;
 
-          return Wrap(
-            spacing: 70,
-            runSpacing: 28,
+          if (isMobile) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.movie_filter, size: 32),
+                const SizedBox(height: 18),
+                const Text('✕   ◎   ▶   in', style: TextStyle(fontSize: 18)),
+                const SizedBox(height: 28),
+                _footerColumn('Use cases', [
+                  'Movie management',
+                  'Showtime booking',
+                  'Ticket selling',
+                  'Seat selection',
+                  'Payment tracking',
+                  'User management',
+                ]),
+                const SizedBox(height: 24),
+                _footerColumn('Explore', [
+                  'Movies',
+                  'Rooms',
+                  'Seats',
+                  'Bookings',
+                  'Payments',
+                  'Tickets',
+                ]),
+                const SizedBox(height: 24),
+                _footerColumn('Resources', [
+                  'Web Cine',
+                  'Flutter App',
+                  'Java Web',
+                  'Phenikaa University',
+                  'Nguyen Hai Ha - Vu Thi Hai Yen',
+                ]),
+              ],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: isMobile ? double.infinity : 180,
-                child: const Column(
+              const SizedBox(
+                width: 260,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(Icons.movie_filter, size: 32),
-                    SizedBox(height: 18),
+                    SizedBox(height: 28),
                     Text('✕   ◎   ▶   in', style: TextStyle(fontSize: 18)),
                   ],
                 ),
               ),
-              _footerColumn('Use cases', [
-                'Movie management',
-                'Showtime booking',
-                'Ticket selling',
-                'Seat selection',
-                'Payment tracking',
-                'User management',
-              ], isMobile),
-              _footerColumn('Explore', [
-                'Movies',
-                'Rooms',
-                'Seats',
-                'Bookings',
-                'Payments',
-                'Tickets',
-              ], isMobile),
-              _footerColumn('Resources', [
-                'Web Cine',
-                'Flutter App',
-                'Java Web',
-                'Phenikaa University',
-                'Nguyen Hai Ha - Vu Thi Hai Yen',
-              ], isMobile),
+              Expanded(
+                child: _footerColumn('Use cases', [
+                  'Movie management',
+                  'Showtime booking',
+                  'Ticket selling',
+                  'Seat selection',
+                  'Payment tracking',
+                  'User management',
+                ]),
+              ),
+              Expanded(
+                child: _footerColumn('Explore', [
+                  'Movies',
+                  'Rooms',
+                  'Seats',
+                  'Bookings',
+                  'Payments',
+                  'Tickets',
+                ]),
+              ),
+              Expanded(
+                child: _footerColumn('Resources', [
+                  'Web Cine',
+                  'Flutter App',
+                  'Java Web',
+                  'Phenikaa University',
+                  'Nguyen Hai Ha - Vu Thi Hai Yen',
+                ]),
+              ),
             ],
           );
         },
@@ -169,40 +211,33 @@ class AppCommon {
     );
   }
 
-  static Widget _footerColumn(
-    String title,
-    List<String> items,
-    bool isMobile,
-  ) {
-    return SizedBox(
-      width: isMobile ? double.infinity : 170,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: textColor,
-            ),
+  static Widget _footerColumn(String title, List<String> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: textColor,
           ),
-          const SizedBox(height: 18),
-          ...items.map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Text(
-                item,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: textColor,
-                  height: 1.3,
-                ),
+        ),
+        const SizedBox(height: 18),
+        ...items.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              item,
+              style: const TextStyle(
+                fontSize: 14,
+                color: textColor,
+                height: 1.35,
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
