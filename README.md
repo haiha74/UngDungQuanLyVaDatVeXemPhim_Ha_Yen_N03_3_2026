@@ -5,6 +5,12 @@
 * Nguyễn Hải Hà - 23010469
 * Vũ Thị Hải Yến - 23010421
 
+## Mục lục
+* Bài thực hành 01 
+* Bài thực hành 02
+* Bài thực hành 03
+* Bài kiểm tra giữa kỳ
+
 ## Bài thực hành 01 
 ### 1. Tạo repo nhóm 
 <img width="1841" height="873" alt="image" src="https://github.com/user-attachments/assets/c5dc1a44-efdf-4623-bf98-6ee25d1e801c" />
@@ -87,6 +93,126 @@
 #### Link Repo : https://github.com/haiha74/UngDungQuanLyVaDatVeXemPhim_Ha_Yen_N03_3_2026.git
 
 #### Link ReadMe : https://github.com/haiha74/UngDungQuanLyVaDatVeXemPhim_Ha_Yen_N03_3_2026/blob/main/README.md
+
+# Bài kiểm tra giữa kỳ
+## WebCinema - Ứng dụng Quản lý & Đặt vé xem phim
+
+## Thông tin nhóm
+
+* **Nguyễn Hải Hà**
+
+  * Phụ trách: **Content**
+* **Vũ Thị Hải Yến**
+
+  * Phụ trách: **Home + About**
+
+---
+
+## Công nghệ sử dụng
+
+* **Flutter**: Xây dựng giao diện đa nền tảng
+* **Dart**: Ngôn ngữ lập trình chính
+* **Material UI**: Thiết kế giao diện
+* **Navigator**: Điều hướng giữa các màn hình
+* **Widget tái sử dụng (`app_common.dart`)**:
+
+  * Dùng chung **Header + Footer + Bottom Navigation**
+
+---
+
+## Phân chia công việc
+
+---
+
+### 1. Home Screen (Vũ Thị Hải Yến)
+
+#### Công nghệ sử dụng
+
+* `StatelessWidget`
+* `SingleChildScrollView`
+* `Column`, `Container`
+* `ListView.horizontal`
+* `BoxDecoration` (banner + bo góc)
+* Dùng lại layout từ `app_common.dart`
+
+#### Mô tả chức năng
+
+* Hiển thị **banner chính**
+* Hiển thị danh sách **phim nổi bật**
+* Scroll ngang danh sách phim
+* Điều hướng sang:
+
+  * Content
+  * About
+
+---
+
+### 2. Content Screen (Nguyễn Hải Hà)
+
+#### Công nghệ sử dụng
+
+* `GridView`
+* `Card`
+* `Image.network`
+* `Text`, `Column`
+* Layout dùng chung `app_common.dart`
+
+#### Mô tả chức năng
+
+* Hiển thị danh sách phim dạng **grid (lưới)**
+* Mỗi phim gồm:
+
+  * Ảnh
+  * Tên phim
+  * Thời lượng
+* Giao diện giống app xem phim thực tế
+
+---
+
+### 3. About Screen (Vũ Thị Hải Yến)
+
+#### Công nghệ sử dụng
+
+* `Column`, `Text`, `Container`
+* `Padding`, `SizedBox`
+* `BoxDecoration`
+* Dùng lại layout từ `app_common.dart`
+
+#### Mô tả chức năng
+
+* Hiển thị thông tin dự án:
+
+  * Tên hệ thống
+  * Mô tả chức năng
+* Hiển thị thông tin nhóm:
+
+  * Tên sinh viên
+* Thiết kế theo **Figma template**
+
+---
+
+## Tái sử dụng Layout chung
+
+Tất cả các màn hình đều sử dụng:
+
+```
+app_common.dart
+```
+
+### Bao gồm:
+
+* Header (AppBar)
+* Footer
+* Bottom Navigation
+
+## Hướng dẫn chạy project
+
+```bash
+flutter pub get
+flutter run
+```
+
+---
 
 
 
