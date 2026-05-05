@@ -5,6 +5,12 @@
 * Nguyễn Hải Hà - 23010469
 * Vũ Thị Hải Yến - 23010421
 
+## Mục lục
+* Bài thực hành 01 
+* Bài thực hành 02
+* Bài thực hành 03
+* Bài kiểm tra giữa kỳ
+
 ## Bài thực hành 01 
 ### 1. Tạo repo nhóm 
 <img width="1841" height="873" alt="image" src="https://github.com/user-attachments/assets/c5dc1a44-efdf-4623-bf98-6ee25d1e801c" />
