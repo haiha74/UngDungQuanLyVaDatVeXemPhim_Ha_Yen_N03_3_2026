@@ -1,80 +1,121 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_common.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 
-  Widget buildHeader() {
+  Widget heroForm() {
     return Container(
-      margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            blurRadius: 6,
-            offset: const Offset(0, 3),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 70),
+      color: const Color(0xfff2f2f2),
+      child: Center(
+        child: SizedBox(
+          width: 360,
+          child: Column(
+            children: [
+              const Text(
+                'About Web Cine',
+                style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              const Text('Project information'),
+              const SizedBox(height: 24),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(18),
+                  child: Column(
+                    children: const [
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Project Name',
+                          hintText: 'Web Cine',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Student Name',
+                          hintText: 'Nguyen Hai Ha',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'University',
+                          hintText: 'Phenikaa University',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      TextField(
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          labelText: 'Message',
+                          hintText: 'Java Web chuyển sang Flutter App',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: null,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.black),
+                  ),
+                  child: Text('Submit'),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: 150,
-            child: Image.network(
-              "https://lethunguyen.github.io/MobileDev/demo/logo.png",
-            ),
-          ),
+    );
+  }
 
-          const CircleAvatar(
-            radius: 25,
-            backgroundImage: NetworkImage(
-              "https://i.ibb.co/m5S4w28T/Beauty-Plus-Collage-2026-04-29-T03-21-20.png",
-            ),
-          ),
+  Widget aboutContent() {
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        children: [
+          _infoRow('Project', 'Web Cine - Quản lý rạp chiếu phim'),
+          _infoRow('Technology', 'Java Web chuyển dần sang Flutter App'),
+          _infoRow('Main Object', 'Movie, Showtime, Booking, Payment, User'),
+          _infoRow('Student', 'Nguyen Hai Ha'),
         ],
       ),
     );
   }
 
-  Widget buildFooter() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      color: Colors.blueGrey,
-      child: const Text(
-        "Phenikaa University - Nguyen Hai Ha - Vu Thi Hai Yen",
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white),
+  Widget _infoRow(String title, String content) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 14),
+      child: ListTile(
+        leading: const Icon(Icons.info_outline),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(content),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        buildHeader(),
-        const SizedBox(height: 20),
-        const Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Text(
-              "ABOUT\n\n"
-              "Bài thực hành tuần 4\n\n"
-              "Project: Web Cine - Quản lý rạp chiếu phim\n"
-              "Sinh viên: Nguyen Hai Ha - Vu Thi Hai Yen\n"
-              "Trường: Phenikaa University\n\n"
-              "Ứng dụng gồm 3 màn hình: Home, Content và About. "
-              "Mỗi màn hình sử dụng Column Layout và điều hướng bằng Bottom Navigation Bar.",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-        ),
-        buildFooter(),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          AppCommon.header(),
+          heroForm(),
+          aboutContent(),
+          AppCommon.footer(),
+        ],
+      ),
     );
   }
 }

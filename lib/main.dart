@@ -4,17 +4,17 @@ import 'pages/content_page.dart';
 import 'pages/about_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const WebCineApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class WebCineApp extends StatefulWidget {
+  const WebCineApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<WebCineApp> createState() => _WebCineAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _WebCineAppState extends State<WebCineApp> {
   int currentIndex = 0;
 
   final List<Widget> pages = const [
@@ -27,10 +27,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Web Cine',
       home: Scaffold(
+        backgroundColor: const Color(0xfff8eef8),
         body: pages[currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
+          selectedItemColor: Colors.deepPurple,
+          unselectedItemColor: Colors.grey,
           onTap: (index) {
             setState(() {
               currentIndex = index;
@@ -39,15 +43,15 @@ class _MyAppState extends State<MyApp> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: "Home",
+              label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.movie),
-              label: "Content",
+              label: 'Content',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.info),
-              label: "About",
+              label: 'About',
             ),
           ],
         ),
