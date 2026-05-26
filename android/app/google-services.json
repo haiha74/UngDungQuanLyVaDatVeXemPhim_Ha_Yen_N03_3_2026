@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "779776563992",
+    "project_id": "webcinema-ef730",
+    "storage_bucket": "webcinema-ef730.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779776563992:android:9e925f876f4750482cdc6d",
+        "android_client_info": {
+          "package_name": "com.example.quanlyrapchieuphim__"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq9mgwCXm6W_DbWlN2xOs-4Lj5d_7yzXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779776563992:android:c541e12d5f0382492cdc6d",
+        "android_client_info": {
+          "package_name": "com.example.quanlyrapchieuphim__ha_yen_n03_3_2026"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq9mgwCXm6W_DbWlN2xOs-4Lj5d_7yzXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

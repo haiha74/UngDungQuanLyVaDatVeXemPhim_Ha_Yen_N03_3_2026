@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'pages/home_page.dart';
 import 'pages/content_page.dart';
 import 'pages/about_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const WebCineApp());
 }
 
@@ -30,16 +39,9 @@ class _WebCineAppState extends State<WebCineApp> {
       title: 'Web Cine',
       home: Scaffold(
         backgroundColor: const Color(0xfff8eef8),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Center(
-            child: SizedBox(
-              width: 1200,
-              child: pages[currentIndex],
-            ),
-          ),
-        ),
+        body: pages[currentIndex],
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
           selectedItemColor: Colors.deepPurple,
           unselectedItemColor: Colors.grey,

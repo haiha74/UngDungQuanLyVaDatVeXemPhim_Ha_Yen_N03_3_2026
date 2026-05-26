@@ -1,53 +1,121 @@
 import 'package:flutter/material.dart';
+
+// Import dữ liệu phim
 import '../data/movie_data.dart';
+
+// Import header/footer dùng chung
 import '../widgets/app_common.dart';
 
+// ===============================
+// TRANG HOME
+// ===============================
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  // ===============================
+  // BANNER CHÍNH
+  // ===============================
+  // Banner hiển thị ảnh lớn đầu trang
   Widget buildBanner() {
+
+    // LayoutBuilder giúp responsive
     return LayoutBuilder(
       builder: (context, constraints) {
-        double bannerHeight = constraints.maxWidth * 0.28;
 
-        if (bannerHeight < 150) bannerHeight = 150;
-        if (bannerHeight > 280) bannerHeight = 280;
+        // Tính chiều cao banner theo width màn hình
+        double bannerHeight =
+            constraints.maxWidth * 0.28;
+
+        // Giới hạn chiều cao tối thiểu
+        if (bannerHeight < 150) {
+          bannerHeight = 150;
+        }
+
+        // Giới hạn chiều cao tối đa
+        if (bannerHeight > 280) {
+          bannerHeight = 280;
+        }
 
         return Container(
-          margin: const EdgeInsets.fromLTRB(36, 36, 36, 24),
+
+          // Margin xung quanh banner
+          margin: const EdgeInsets.fromLTRB(
+            36,
+            36,
+            36,
+            24,
+          ),
+
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(4),
+
+            // Bo góc banner
+            borderRadius:
+                BorderRadius.circular(4),
+
             child: Stack(
               children: [
+
+                // ===============================
+                // ẢNH BANNER
+                // ===============================
                 Image.network(
+
+                  // Link ảnh online
                   'https://images.unsplash.com/photo-1517602302552-471fe67acf66',
+
                   width: double.infinity,
                   height: bannerHeight,
+
+                  // Ảnh phủ kín khung
                   fit: BoxFit.cover,
                 ),
+
+                // ===============================
+                // LỚP OVERLAY TỐI
+                // ===============================
+                // Tạo lớp đen mờ để chữ nổi bật hơn
                 Container(
                   width: double.infinity,
                   height: bannerHeight,
+
                   color: Colors.black.withOpacity(0.35),
                 ),
+
+                // ===============================
+                // TEXT TRÊN BANNER
+                // ===============================
                 const Positioned(
+
+                  // Vị trí chữ
                   left: 28,
                   bottom: 24,
+
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start,
+
                     children: [
+
+                      // Tiêu đề banner
                       Text(
                         'WEB CINE',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 42,
-                          fontWeight: FontWeight.w800,
+                          fontWeight:
+                              FontWeight.w800,
                         ),
                       ),
+
                       SizedBox(height: 8),
+
+                      // Subtitle banner
                       Text(
                         'Movie Booking Management System',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                        ),
                       ),
                     ],
                   ),
@@ -60,63 +128,141 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget buildMoviePreview() {
+  // ===============================
+  // GRID DANH SÁCH PHIM
+  // ===============================
+  Widget movieGrid() {
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(36, 10, 36, 40),
+      padding: const EdgeInsets.fromLTRB(
+        36,
+        42,
+        36,
+        52,
+      ),
+
       child: LayoutBuilder(
+
+        // Responsive layout
         builder: (context, constraints) {
-          final isMobile = constraints.maxWidth < 700;
+
+          // Nếu width nhỏ hơn 700 => mobile
+          final isMobile =
+              constraints.maxWidth < 700;
 
           return GridView.builder(
+
+            // Grid nằm trong scroll cha
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+
+            // Tắt scroll riêng của GridView
+            physics:
+                const NeverScrollableScrollPhysics(),
+
+            // Số lượng phim
             itemCount: movies.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: isMobile ? 1 : 3,
-              crossAxisSpacing: 18,
-              mainAxisSpacing: 18,
-              childAspectRatio: isMobile ? 2.2 : 1.75,
+
+            // ===============================
+            // CẤU HÌNH GRID
+            // ===============================
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(
+
+              // Mobile 1 cột
+              // Desktop 3 cột
+              crossAxisCount:
+                  isMobile ? 1 : 3,
+
+              // Khoảng cách ngang
+              crossAxisSpacing: 28,
+
+              // Khoảng cách dọc
+              mainAxisSpacing: 28,
+
+              // Tỉ lệ card
+              childAspectRatio:
+                  isMobile ? 1.6 : 0.9,
             ),
+
+            // ===============================
+            // TẠO TỪNG ITEM
+            // ===============================
             itemBuilder: (context, index) {
+
+              // Lấy dữ liệu phim
               final movie = movies[index];
 
               return Container(
-                padding: const EdgeInsets.all(10),
+
+                // Padding bên trong card
+                padding:
+                    const EdgeInsets.all(14),
+
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: AppCommon.borderColor),
-                  borderRadius: BorderRadius.circular(6),
+
+                  // Viền card
+                  border: Border.all(
+                    color:
+                        AppCommon.borderColor,
+                  ),
+
+                  // Bo góc card
+                  borderRadius:
+                      BorderRadius.circular(4),
                 ),
+
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+
                   children: [
-                    SizedBox(
-                      height: isMobile ? 120 : 130,
-                      width: double.infinity,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: Image.network(
-                          movie['posterUrl'],
-                          fit: BoxFit.cover,
-                        ),
+
+                    // ===============================
+                    // ẢNH PHIM
+                    // ===============================
+                    Expanded(
+                      child: Image.network(
+                        movie.posterUrl,
+
+                        width: double.infinity,
+
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    const SizedBox(height: 8),
+
+                    const SizedBox(height: 12),
+
+                    // ===============================
+                    // TÊN PHIM
+                    // ===============================
                     Text(
-                      movie['title'],
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      movie.name,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
+                        fontWeight:
+                            FontWeight.bold,
+                        fontSize: 16,
                       ),
                     ),
-                    const SizedBox(height: 4),
+
+                    const SizedBox(height: 6),
+
+                    // ===============================
+                    // MÔ TẢ PHIM
+                    // ===============================
                     Text(
-                      '${movie['runtime']} phút • ${movie['status']}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 13, color: Colors.grey),
+                      movie.description,
+
+                      // Giới hạn 2 dòng
+                      maxLines: 2,
+
+                      // Quá dài hiện ...
+                      overflow:
+                          TextOverflow.ellipsis,
+
+                      style: const TextStyle(
+                        fontSize: 13,
+                      ),
                     ),
                   ],
                 ),
@@ -128,13 +274,26 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // ===============================
+  // PHẦN GIỚI THIỆU
+  // ===============================
   Widget buildIntro() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 70, horizontal: 36),
+
+      // Padding section
+      padding: const EdgeInsets.symmetric(
+        vertical: 70,
+        horizontal: 36,
+      ),
+
+      // Màu nền chung
       color: AppCommon.bgColor,
+
       child: const Column(
         children: [
+
+          // Tiêu đề
           Text(
             'Home Web Cine',
             style: TextStyle(
@@ -143,36 +302,76 @@ class HomePage extends StatelessWidget {
               color: Color(0xff222222),
             ),
           ),
+
           SizedBox(height: 10),
+
+          // Mô tả
           Text(
             'Hệ thống quản lý thông tin phim, suất chiếu, đặt vé và người dùng.',
+
+            // Căn giữa text
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, color: Color(0xff555555)),
+
+            style: TextStyle(
+              fontSize: 20,
+              color: Color(0xff555555),
+            ),
           ),
         ],
       ),
     );
   }
 
+  // ===============================
+  // BUILD GIAO DIỆN CHÍNH
+  // ===============================
   @override
   Widget build(BuildContext context) {
+
+    // Scroll toàn bộ trang
     return SingleChildScrollView(
+
       child: Column(
         children: [
+
+          // Header dùng chung
           AppCommon.header(),
+
+          // Section giới thiệu
           buildIntro(),
+
+          // Banner phim
           buildBanner(),
+
+          // ===============================
+          // TIÊU ĐỀ DANH SÁCH PHIM
+          // ===============================
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 36),
+            padding:
+                EdgeInsets.symmetric(
+              horizontal: 36,
+            ),
+
             child: Align(
+
+              // Căn trái
               alignment: Alignment.centerLeft,
+
               child: Text(
                 'Phim nổi bật',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-          buildMoviePreview(),
+
+          // Grid danh sách phim
+          movieGrid(),
+
+          // Footer dùng chung
           AppCommon.footer(),
         ],
       ),
