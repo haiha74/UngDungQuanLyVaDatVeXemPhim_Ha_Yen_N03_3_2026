@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/movie_data.dart';
 import '../widgets/app_common.dart';
+import 'booking_form_page.dart';
 
 class ContentPage extends StatelessWidget {
   const ContentPage({super.key});
@@ -51,18 +52,23 @@ class ContentPage extends StatelessWidget {
     );
   }
 
-  Widget movieList() {
+  Widget movieList(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Movie List',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const Text(
+            'Movie List',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 4),
-          const Text('Data from Web Cine',
-              style: TextStyle(fontSize: 13, color: Colors.grey)),
+          const Text(
+            'Data from Web Cine',
+            style: TextStyle(fontSize: 13, color: Colors.grey),
+          ),
           const SizedBox(height: 22),
+
           ...movies.map((movie) {
             return Container(
               margin: const EdgeInsets.only(bottom: 18),
@@ -80,23 +86,60 @@ class ContentPage extends StatelessWidget {
                     height: 82,
                     fit: BoxFit.cover,
                   ),
+
                   const SizedBox(width: 18),
+
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(movie['title'],
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
+                        Text(
+                          movie['title'],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
                         const SizedBox(height: 4),
+
                         Text(
                           movie['description'],
                           style: const TextStyle(fontSize: 13, height: 1.3),
                         ),
-                        const SizedBox(height: 8),
-                        OutlinedButton(
-                          onPressed: null,
-                          child: Text('${movie['runtime']} phút'),
+
+                        const SizedBox(height: 10),
+
+                        Row(
+                          children: [
+                            OutlinedButton(
+                              onPressed: null,
+                              child: Text('${movie['runtime']} phút'),
+                            ),
+
+                            const SizedBox(width: 12),
+
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BookingFormPage(
+                                      movieName: movie['title'],
+                                    ),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 22,
+                                  vertical: 12,
+                                ),
+                              ),
+                              child: const Text('Mua vé'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -110,7 +153,7 @@ class ContentPage extends StatelessWidget {
     );
   }
 
-  Widget movieGrid() {
+  Widget movieGrid(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
       child: LayoutBuilder(
@@ -125,9 +168,7 @@ class ContentPage extends StatelessWidget {
               crossAxisCount: isMobile ? 1 : 3,
               crossAxisSpacing: 18,
               mainAxisSpacing: 18,
-
-              // Số càng lớn thì card càng thấp
-              childAspectRatio: isMobile ? 2.2 : 1.75,
+              childAspectRatio: isMobile ? 2.0 : 1.45,
             ),
             itemBuilder: (context, index) {
               final movie = movies[index];
@@ -143,7 +184,7 @@ class ContentPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: isMobile ? 120 : 130,
+                      height: isMobile ? 120 : 120,
                       width: double.infinity,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
@@ -153,7 +194,9 @@ class ContentPage extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 8),
+
                     Text(
                       movie['title'],
                       maxLines: 1,
@@ -163,7 +206,9 @@ class ContentPage extends StatelessWidget {
                         fontSize: 15,
                       ),
                     ),
+
                     const SizedBox(height: 4),
+
                     Text(
                       movie['description'],
                       maxLines: 1,
@@ -171,6 +216,29 @@ class ContentPage extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 13,
                         color: Colors.grey,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookingFormPage(
+                                 movieName: movie['title'],
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Mua vé'),
                       ),
                     ),
                   ],
@@ -191,8 +259,8 @@ class ContentPage extends StatelessWidget {
           AppCommon.header(),
           hero(),
           imagePanel(),
-          movieList(),
-          movieGrid(),
+          movieList(context),
+          movieGrid(context),
           AppCommon.footer(),
         ],
       ),

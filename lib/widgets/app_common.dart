@@ -14,6 +14,7 @@ class AppCommon {
         border: Border(bottom: BorderSide(color: borderColor)),
       ),
       child: LayoutBuilder(
+        // chieu rong screen
         builder: (context, constraints) {
           final isMobile = constraints.maxWidth < 760;
 
