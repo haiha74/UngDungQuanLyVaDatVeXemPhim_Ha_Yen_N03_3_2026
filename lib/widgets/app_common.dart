@@ -11,7 +11,9 @@ class AppCommon {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(bottom: BorderSide(color: borderColor)),
+        border: Border(
+          bottom: BorderSide(color: borderColor),
+        ),
       ),
       child: LayoutBuilder(
         // chieu rong screen
@@ -26,20 +28,43 @@ class AppCommon {
                   height: 24,
                 ),
                 const Spacer(),
-
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.menu),
                   onSelected: (value) {},
                   itemBuilder: (context) => const [
-                    PopupMenuItem(value: 'products', child: Text('Products')),
-                    PopupMenuItem(value: 'solutions', child: Text('Solutions')),
-                    PopupMenuItem(value: 'community', child: Text('Community')),
-                    PopupMenuItem(value: 'resources', child: Text('Resources')),
-                    PopupMenuItem(value: 'pricing', child: Text('Pricing')),
-                    PopupMenuItem(value: 'contact', child: Text('Contact')),
+                    PopupMenuItem(
+                      value: 'products',
+                      child: Text('Products'),
+                    ),
+                    PopupMenuItem(
+                      value: 'solutions',
+                      child: Text('Solutions'),
+                    ),
+                    PopupMenuItem(
+                      value: 'community',
+                      child: Text('Community'),
+                    ),
+                    PopupMenuItem(
+                      value: 'resources',
+                      child: Text('Resources'),
+                    ),
+                    PopupMenuItem(
+                      value: 'pricing',
+                      child: Text('Pricing'),
+                    ),
+                    PopupMenuItem(
+                      value: 'contact',
+                      child: Text('Contact'),
+                    ),
                     PopupMenuDivider(),
-                    PopupMenuItem(value: 'signin', child: Text('Sign in')),
-                    PopupMenuItem(value: 'register', child: Text('Register')),
+                    PopupMenuItem(
+                      value: 'signin',
+                      child: Text('Sign in'),
+                    ),
+                    PopupMenuItem(
+                      value: 'register',
+                      child: Text('Register'),
+                    ),
                   ],
                 ),
               ],
@@ -82,10 +107,15 @@ class AppCommon {
             EdgeInsets.symmetric(horizontal: 14, vertical: 18),
           ),
           shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
           ),
         ),
-        child: Text(text, style: const TextStyle(fontSize: 13)),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 13),
+        ),
       ),
     );
   }
@@ -131,8 +161,12 @@ class AppCommon {
               children: [
                 const Icon(Icons.movie_filter, size: 32),
                 const SizedBox(height: 18),
-                const Text('✕   ◎   ▶   in', style: TextStyle(fontSize: 18)),
+                const Text(
+                  '✕   ◎   ▶   in',
+                  style: TextStyle(fontSize: 18),
+                ),
                 const SizedBox(height: 28),
+
                 _footerColumn('Use cases', [
                   'Movie management',
                   'Showtime booking',
@@ -141,7 +175,9 @@ class AppCommon {
                   'Payment tracking',
                   'User management',
                 ]),
+
                 const SizedBox(height: 24),
+
                 _footerColumn('Explore', [
                   'Movies',
                   'Rooms',
@@ -150,7 +186,9 @@ class AppCommon {
                   'Payments',
                   'Tickets',
                 ]),
+
                 const SizedBox(height: 24),
+
                 _footerColumn('Resources', [
                   'Web Cine',
                   'Flutter App',
@@ -172,10 +210,14 @@ class AppCommon {
                   children: [
                     Icon(Icons.movie_filter, size: 32),
                     SizedBox(height: 28),
-                    Text('✕   ◎   ▶   in', style: TextStyle(fontSize: 18)),
+                    Text(
+                      '✕   ◎   ▶   in',
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ],
                 ),
               ),
+
               Expanded(
                 child: _footerColumn('Use cases', [
                   'Movie management',
@@ -186,6 +228,7 @@ class AppCommon {
                   'User management',
                 ]),
               ),
+
               Expanded(
                 child: _footerColumn('Explore', [
                   'Movies',
@@ -196,6 +239,7 @@ class AppCommon {
                   'Tickets',
                 ]),
               ),
+
               Expanded(
                 child: _footerColumn('Resources', [
                   'Web Cine',
@@ -224,7 +268,9 @@ class AppCommon {
             color: textColor,
           ),
         ),
+
         const SizedBox(height: 18),
+
         ...items.map(
           (item) => Padding(
             padding: const EdgeInsets.only(bottom: 10),

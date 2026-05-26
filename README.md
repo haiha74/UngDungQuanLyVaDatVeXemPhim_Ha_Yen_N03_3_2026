@@ -131,7 +131,6 @@
 * `StatelessWidget`
 * `SingleChildScrollView`
 * `Column`, `Container`
-* `ListView.horizontal`
 * `BoxDecoration` (banner + bo góc)
 * Dùng lại layout từ `app_common.dart`
 

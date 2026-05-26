@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
 
 import 'pages/home_page.dart';
 import 'pages/content_page.dart';
 import 'pages/about_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const WebCineApp());
 }
 
@@ -30,9 +41,14 @@ class _WebCineAppState extends State<WebCineApp> {
       debugShowCheckedModeBanner: false,
       title: 'Web Cine',
       home: Scaffold(
+<<<<<<< HEAD
         backgroundColor: Color(0xfff8eef8),
+=======
+        backgroundColor: const Color(0xfff8eef8),
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
         body: pages[currentIndex],
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
           selectedItemColor: Colors.deepPurple,
           unselectedItemColor: Colors.grey,
