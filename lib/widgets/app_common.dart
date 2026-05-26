@@ -16,6 +16,7 @@ class AppCommon {
         ),
       ),
       child: LayoutBuilder(
+        // chieu rong screen
         builder: (context, constraints) {
           final isMobile = constraints.maxWidth < 760;
 

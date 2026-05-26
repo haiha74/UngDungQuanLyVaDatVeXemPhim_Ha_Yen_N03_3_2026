@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import '../data/movie_data.dart';
 import '../widgets/app_common.dart';
+<<<<<<< HEAD
+import 'booking_form_page.dart';
+=======
 import 'package:cloud_firestore/cloud_firestore.dart';
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
 
 class ContentPage extends StatefulWidget {
   const ContentPage({super.key});
@@ -100,6 +104,9 @@ class _ContentPageState extends State<ContentPage> {
     );
   }
 
+<<<<<<< HEAD
+  Widget movieList(BuildContext context) {
+=======
   Widget ticketForm() {
     return Container(
       margin: const EdgeInsets.fromLTRB(36, 0, 36, 42),
@@ -224,6 +231,7 @@ class _ContentPageState extends State<ContentPage> {
   }
 
   Widget movieList() {
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: Column(
@@ -239,6 +247,7 @@ class _ContentPageState extends State<ContentPage> {
             style: TextStyle(fontSize: 13, color: Colors.grey),
           ),
           const SizedBox(height: 22),
+
           ...movies.map((movie) {
             return Container(
               margin: const EdgeInsets.only(bottom: 18),
@@ -256,20 +265,68 @@ class _ContentPageState extends State<ContentPage> {
                     height: 82,
                     fit: BoxFit.cover,
                   ),
+
                   const SizedBox(width: 18),
+
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
+<<<<<<< HEAD
+                          movie['title'],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+=======
                           movie.name,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
                         const SizedBox(height: 4),
+
                         Text(
                           movie.description,
                           style: const TextStyle(fontSize: 13, height: 1.3),
                         ),
+<<<<<<< HEAD
+
+                        const SizedBox(height: 10),
+
+                        Row(
+                          children: [
+                            OutlinedButton(
+                              onPressed: null,
+                              child: Text('${movie['runtime']} phút'),
+                            ),
+
+                            const SizedBox(width: 12),
+
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BookingFormPage(
+                                      movieName: movie['title'],
+                                    ),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 22,
+                                  vertical: 12,
+                                ),
+                              ),
+                              child: const Text('Mua vé'),
+                            ),
+                          ],
+=======
                         const SizedBox(height: 8),
                         OutlinedButton(
                           onPressed: null,
@@ -289,6 +346,7 @@ class _ContentPageState extends State<ContentPage> {
 
                             ],
                           ),
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
                         ),
                       ],
                     ),
@@ -302,7 +360,7 @@ class _ContentPageState extends State<ContentPage> {
     );
   }
 
-  Widget movieGrid() {
+  Widget movieGrid(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
       child: GridView.builder(
@@ -318,12 +376,24 @@ class _ContentPageState extends State<ContentPage> {
         itemBuilder: (context, index) {
           final movie = movies[index];
 
+<<<<<<< HEAD
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: movies.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: isMobile ? 1 : 3,
+              crossAxisSpacing: 18,
+              mainAxisSpacing: 18,
+              childAspectRatio: isMobile ? 2.0 : 1.45,
+=======
           return Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: AppCommon.borderColor),
               borderRadius: BorderRadius.circular(6),
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,6 +409,70 @@ class _ContentPageState extends State<ContentPage> {
                     ),
                   ),
                 ),
+<<<<<<< HEAD
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: isMobile ? 120 : 120,
+                      width: double.infinity,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.network(
+                          movie['posterUrl'],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Text(
+                      movie['title'],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    Text(
+                      movie['description'],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookingFormPage(
+                                 movieName: movie['title'],
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Mua vé'),
+                      ),
+                    ),
+                  ],
+=======
                 const SizedBox(height: 8),
                 Text(
                   movie.name,
@@ -348,6 +482,7 @@ class _ContentPageState extends State<ContentPage> {
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -372,9 +507,14 @@ class _ContentPageState extends State<ContentPage> {
           AppCommon.header(),
           hero(),
           imagePanel(),
+<<<<<<< HEAD
+          movieList(context),
+          movieGrid(context),
+=======
           movieList(),
           movieGrid(),
           ticketForm(),
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
           AppCommon.footer(),
         ],
       ),

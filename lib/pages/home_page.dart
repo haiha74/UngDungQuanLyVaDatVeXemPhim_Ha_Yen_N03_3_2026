@@ -128,6 +128,71 @@ class HomePage extends StatelessWidget {
     );
   }
 
+<<<<<<< HEAD
+  Widget movieGrid() {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(36, 42, 36, 52),
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 700;
+
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: movies.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: isMobile ? 1 : 3,
+            crossAxisSpacing: 28,
+            mainAxisSpacing: 28,
+            childAspectRatio: isMobile ? 1.6 : 0.9,
+          ),
+          itemBuilder: (context, index) {
+            final movie = movies[index];
+
+            return Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration( // bo góc - đổ bóng nền
+                color: Colors.white,
+                border: Border.all(color: AppCommon.borderColor),
+                borderRadius: BorderRadius.circular(4),
+              ),
+                child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Image.network(
+                      movie['posterUrl'],
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    movie['title'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    movie['description'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    ),
+  );
+}
+
+ Widget buildIntro() {
+=======
   // ===============================
   // GRID DANH SÁCH PHIM
   // ===============================
@@ -278,6 +343,7 @@ class HomePage extends StatelessWidget {
   // PHẦN GIỚI THIỆU
   // ===============================
   Widget buildIntro() {
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
     return Container(
       width: double.infinity,
 
@@ -330,7 +396,11 @@ class HomePage extends StatelessWidget {
 
     // Scroll toàn bộ trang
     return SingleChildScrollView(
+<<<<<<< HEAD
+      // cho phép cuộn khi nội dung vượt quá chiều cao
+=======
 
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
       child: Column(
         children: [
 
@@ -367,11 +437,15 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
+<<<<<<< HEAD
+          movieGrid(),
+=======
 
           // Grid danh sách phim
           movieGrid(),
 
           // Footer dùng chung
+>>>>>>> 13eba9893d6a23280c9f86bb2f6dcccced9d46c9
           AppCommon.footer(),
         ],
       ),
