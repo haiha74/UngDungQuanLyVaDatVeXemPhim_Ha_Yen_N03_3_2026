@@ -37,7 +37,7 @@ android {
         applicationId =
             "com.example.quanlyrapchieuphim__ha_yen_n03_3_2026"
 
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
 
         targetSdk =
             flutter.targetSdkVersion

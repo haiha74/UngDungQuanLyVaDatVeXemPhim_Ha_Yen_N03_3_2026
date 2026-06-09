@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard | CineBooking</title>
+  <link rel="stylesheet" href="./admin_dashboard.css" />
+
+  <!-- Guard sớm: không có token/role thì đá về login -->
+  <script>
+    function getToken(){ return localStorage.getItem("cine_token") || sessionStorage.getItem("cine_token"); }
+    function getRole(){ return localStorage.getItem("cine_role") || sessionStorage.getItem("cine_role"); }
+    (function(){
+      const token = getToken();
+      const role = (getRole() || "").toUpperCase();
+      if (!token || role !== "ADMIN") window.location.replace("./admin_login.html");
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sb-top">
+        <div class="sb-title">
+          <div class="sb-h1">Admin Panel</div>
+          <div class="sb-sub">CineBooking</div>
+        </div>
+      </div>
+
+      <nav class="sb-nav">
+        <button class="nav-item active" data-page="dashboard">Dashboard</button>
+        <button class="nav-item" data-page="movies">Movies</button>
+        <button class="nav-item" data-page="showtimes">Showtimes</button>
+        <button class="nav-item" data-page="rooms">Rooms</button>
+        <button class="nav-item" data-page="seats">Seats</button>
+        <button class="nav-item" data-page="staff">Staff</button>
+      </nav>
+
+      <div class="sb-bottom">
+        <button id="btnLogout" class="btn btn-ghost">Logout</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="title" id="pageTitle">Dashboard</div>
+          <div class="muted" id="pageDesc">Thống kê tổng quan hệ thống</div>
+        </div>
+
+        <div class="top-actions">
+          <button id="btnRefresh" class="btn btn-ghost">Refresh</button>
+        </div>
+      </header>
+
+      <!-- ================= DASHBOARD ================= -->
+      <section class="page" id="page-dashboard">
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-label">Movies</div>
+            <div class="card-value" id="kpiMovies">—</div>
+            <div class="card-note">Tổng số phim</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Rooms</div>
+            <div class="card-value" id="kpiRooms">—</div>
+            <div class="card-note">Tổng số phòng</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Showtimes</div>
+            <div class="card-value" id="kpiShowtimes">—</div>
+            <div class="card-note">Tổng số suất chiếu</div>
+          </div>
+        </div>
+
+        <div class="card big">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Tóm tắt nhanh</div>
+              <div class="muted">Lấy dữ liệu từ /api/admin/* hiện có</div>
+            </div>
+          </div>
+
+          <div class="summary">
+            <div class="summary-item">
+              <div class="summary-k">Movie status</div>
+              <div class="summary-v" id="movieStatusBreakdown">—</div>
+            </div>
+            <div class="summary-item">
+              <div class="summary-k">Room screen types</div>
+              <div class="summary-v" id="roomTypeBreakdown">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="note">
+          * Dashboard hiện thống kê theo dữ liệu Movies/Rooms/Showtimes
+        </div>
+
+        <!-- ===== REVENUE DASHBOARD (CHỈ NẰM TRONG DASHBOARD) ===== -->
+        <section class="cb-card" style="margin-top:16px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap;">
+            <div>
+              <h3 style="margin:0; font-size:18px;">Thống kê doanh thu</h3>
+              <!-- <div class="cb-muted" style="margin-top:6px;">Chỉ tính booking trạng thái <b>PAID</b> theo <b>paidAt</b></div> -->
+            </div>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button id="btnRevReloadAll" class="cb-btn cb-btn--white" type="button">Tải lại</button>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px;">
+            <!-- ===== DAILY ===== -->
+            <div class="cb-card" style="padding:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:10px; flex-wrap:wrap;">
+                <div>
+                  <div class="cb-muted">Doanh thu theo ngày</div>
+                  <div id="revDailyTotal" style="font-weight:800; font-size:18px; margin-top:4px;">0 đ</div>
+                  <div id="revDailyOrders" class="cb-muted" style="margin-top:4px;">0 đơn</div>
+                </div>
+
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                  <button id="btnToday" class="cb-btn cb-btn--white" type="button">Hôm nay</button>
+                  <button id="btn7Days" class="cb-btn cb-btn--white" type="button">7 ngày</button>
+
+                  <input id="revFrom" type="date" class="cb-input" style="min-width:150px;">
+                  <input id="revTo" type="date" class="cb-input" style="min-width:150px;">
+                  <button id="btnRevDaily" class="cb-btn cb-btn--red" type="button">Xem</button>
+                </div>
+              </div>
+
+              <div style="margin-top:12px;">
+                <div id="revDailyEmpty" class="cb-muted" style="display:none; margin-bottom:8px;">Không có dữ liệu.</div>
+                <canvas id="chartDaily" height="120"></canvas>
+              </div>
+            </div>
+
+            <!-- ===== MONTHLY ===== -->
+            <div class="cb-card" style="padding:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:10px; flex-wrap:wrap;">
+                <div>
+                  <div class="cb-muted">Doanh thu theo tháng</div>
+                  <div id="revMonthlyTotal" style="font-weight:800; font-size:18px; margin-top:4px;">0 đ</div>
+                  <div id="revMonthlyOrders" class="cb-muted" style="margin-top:4px;">0 đơn</div>
+                </div>
+
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                  <button id="btnThisMonth" class="cb-btn cb-btn--white" type="button">Tháng này</button>
+
+                  <select id="revYear" class="cb-input" style="min-width:120px;"></select>
+                  <button id="btnRevMonthly" class="cb-btn cb-btn--red" type="button">Xem</button>
+                </div>
+              </div>
+
+              <div style="margin-top:12px;">
+                <div id="revMonthlyEmpty" class="cb-muted" style="display:none; margin-bottom:8px;">Không có dữ liệu.</div>
+                <canvas id="chartMonthly" height="120"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- ================= MOVIES ================= -->
+      <section class="page hidden" id="page-movies">
+        <div class="toolbar">
+          <div class="left">
+            <input id="movieSearch" class="input" placeholder="Search title..." />
+          </div>
+          <div class="right">
+            <button id="btnMovieAdd" class="btn">+ Add Movie</button>
+          </div>
+        </div>
+
+        <div class="card big">
+          <div class="table-wrap">
+            <table class="table" id="movieTable">
+              <thead>
+                <tr>
+                  <th style="width:90px;">ID</th>
+                  <th>Title</th>
+                  <th style="width:110px;">Trailer</th>
+                  <th style="width:140px;">Runtime</th>
+                  <th style="width:170px;">Status</th>
+                  <th style="width:210px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SHOWTIMES ================= -->
+      <section class="page hidden" id="page-showtimes">
+        <div class="toolbar">
+          <div class="left muted">Tạo/sửa suất chiếu (AdminShowtimeRequest)</div>
+          <div class="right">
+            <button id="btnShowtimeAdd" class="btn">+ Add Showtime</button>
+          </div>
+        </div>
+
+        <div class="card big">
+          <div class="table-wrap">
+            <table class="table" id="showtimeTable">
+              <thead>
+                <tr>
+                  <th style="width:90px;">ID</th>
+                  <th>Movie</th>
+                  <th>Room</th>
+                  <th style="width:200px;">Start</th>
+                  <th style="width:200px;">End</th>
+                  <th style="width:210px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ROOMS ================= -->
+      <section class="page hidden" id="page-rooms">
+        <div class="toolbar">
+          <div class="left muted">Quản lý phòng chiếu</div>
+          <div class="right">
+            <button id="btnRoomAdd" class="btn">+ Add Room</button>
+          </div>
+        </div>
+
+        <div class="card big">
+          <div class="table-wrap">
+            <table class="table" id="roomTable">
+              <thead>
+                <tr>
+                  <th style="width:90px;">ID</th>
+                  <th>Room Name</th>
+                  <th style="width:220px;">Screen Type</th>
+                  <th style="width:210px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SEATS ================= -->
+      <section class="page hidden" id="page-seats">
+        <div class="card big">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Seat Management</div>
+              <div class="muted">Generate/Clear seat map theo room</div>
+            </div>
+          </div>
+
+          <div class="seat-tools">
+            <div class="field">
+              <label>Room</label>
+              <select id="seatRoomSelect" class="select"></select>
+            </div>
+            <div class="field">
+              <label>Rows</label>
+              <input id="seatRows" class="input" type="number" min="1" value="8"/>
+            </div>
+            <div class="field">
+              <label>Cols</label>
+              <input id="seatCols" class="input" type="number" min="1" value="10"/>
+            </div>
+            <div class="field">
+              <label>Seat Type</label>
+              <select id="seatType" class="select">
+                <option value="STANDARD">STANDARD</option>
+                <option value="VIP">VIP</option>
+              </select>
+            </div>
+
+            <div class="seat-actions">
+              <button id="btnGenerateSeats" class="btn">Generate</button>
+              <button id="btnClearSeats" class="btn btn-danger">Clear</button>
+              <button id="btnReloadSeats" class="btn btn-ghost">Reload</button>
+            </div>
+          </div>
+
+          <div class="seat-grid-wrap">
+            <div class="muted" id="seatMeta">—</div>
+            <div class="seat-grid" id="seatGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STAFF (PAGE RIÊNG, KHÔNG CÒN THỐNG KÊ) ================= -->
+      <section class="page hidden" id="page-staff">
+
+        <section class="cb-card" id="staffSection" style="padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:12px; flex-wrap:wrap;">
+            <div>
+              <h3 style="margin:0; font-size:18px;">Quản lý nhân viên (Staff)</h3>
+              <div class="cb-muted" style="margin-top:6px;">CRUD staff (ADMIN)</div>
+            </div>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+              <input id="staffQ" class="cb-input" placeholder="Tìm theo tên/email..." style="min-width:240px;">
+              <button id="btnStaffSearch" class="cb-btn cb-btn--white" type="button">Tìm</button>
+              <button id="btnStaffCreate" class="cb-btn cb-btn--red" type="button">+ Thêm staff</button>
+            </div>
+          </div>
+
+          <div style="margin-top:12px; overflow:auto;">
+            <table class="cb-table" style="width:100%; min-width:840px;">
+              <thead>
+                <tr>
+                  <th style="width:70px;">ID</th>
+                  <th>Họ tên</th>
+                  <th>Email</th>
+                  <th style="width:120px;">Role</th>
+                  <th style="width:120px;">Trạng thái</th>
+                  <th style="width:220px; text-align:right;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="staffTbody">
+                <tr><td colspan="6" class="cb-muted">Chưa có dữ liệu.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:12px; flex-wrap:wrap;">
+            <div id="staffMeta" class="cb-muted">—</div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button id="staffPrev" class="cb-btn cb-btn--white" type="button">←</button>
+              <div class="cb-muted">Trang</div>
+              <span id="staffPage" style="font-weight:800;">1</span>
+              <button id="staffNext" class="cb-btn cb-btn--white" type="button">→</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== STAFF MODAL (Create / Update) ===== -->
+        <div class="cb-modal" id="staffModal" style="display:none;">
+          <div class="cb-modal__backdrop" data-close="1"></div>
+          <div class="cb-modal__panel">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+              <h3 id="staffModalTitle" style="margin:0; font-size:18px;">Thêm staff</h3>
+              <button class="cb-btn cb-btn--white" type="button" data-close="1">Đóng</button>
+            </div>
+
+            <div class="cb-muted" style="margin-top:6px;" id="staffModalHint"></div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:12px;">
+              <div>
+                <div class="cb-muted" style="margin-bottom:6px;">Họ tên</div>
+                <input id="staffFullName" class="cb-input" placeholder="Nguyễn Văn A">
+              </div>
+
+              <div>
+                <div class="cb-muted" style="margin-bottom:6px;">Email</div>
+                <input id="staffEmail" class="cb-input" placeholder="staff@cine.com">
+              </div>
+
+              <div>
+                <div class="cb-muted" style="margin-bottom:6px;">Role</div>
+                <select id="staffRole" class="cb-input">
+                  <option value="STAFF">STAFF</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
+              </div>
+
+              <div id="staffPasswordWrap">
+                <div class="cb-muted" style="margin-bottom:6px;">Mật khẩu (chỉ khi tạo mới)</div>
+                <input id="staffPassword" class="cb-input" type="password" placeholder="Tối thiểu 6 ký tự">
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+              <button id="btnStaffSave" class="cb-btn cb-btn--red" type="button">Lưu</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Toast -->
+      <div class="toast" id="toast"></div>
+
+    </main>
+  </div>
+
+  <!-- MODAL (Movies/Rooms/Showtimes etc.) -->
+  <div class="modal hidden" id="modal">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title" id="modalTitle">—</div>
+        <button class="icon-btn" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-foot" id="modalFoot"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="./admin_dashboard.js" defer></script>
+</body>
+</html>
