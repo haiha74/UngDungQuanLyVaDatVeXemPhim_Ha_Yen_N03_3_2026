@@ -7,4 +7,5 @@ class AdminBookingsPage extends AdminCollectionPage {
           title: 'Bookings',
           statusField: 'status',
         );
+        
 }
