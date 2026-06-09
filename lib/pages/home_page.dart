@@ -16,9 +16,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = MovieService();
+    final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: AppBackground(
         child: StreamBuilder<List<Movie>>(
           stream: service.watchMovies(),
@@ -26,13 +26,13 @@ class HomePage extends StatelessWidget {
           builder: (context, snapshot) {
             final movies = snapshot.data ?? const <Movie>[];
             if (movies.isEmpty) {
-              return const Center(
+              return Center(
                 child: Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   child: Text(
                     'Chưa có phim. Vui lòng thêm phim trong Admin.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                 ),
               );
@@ -107,13 +107,15 @@ class _HeroBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Container(
       height: 360,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.45),
+            color: scheme.shadow.withValues(alpha: 0.3),
             blurRadius: 30,
             offset: const Offset(0, 16),
           ),
@@ -127,16 +129,19 @@ class _HeroBanner extends StatelessWidget {
             movie.posterUrl,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) => Container(
-              color: const Color(0xFF202026),
-              child: const Icon(Icons.local_movies, color: Colors.white54, size: 60),
+              color: scheme.surfaceContainerHighest,
+              child: Icon(Icons.local_movies, color: scheme.onSurfaceVariant, size: 60),
             ),
           ),
-          const DecoratedBox(
+          DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Color(0xDD050506)],
+                colors: [
+                  scheme.scrim.withValues(alpha: 0),
+                  scheme.scrim.withValues(alpha: 0.72),
+                ],
               ),
             ),
           ),
@@ -149,7 +154,7 @@ class _HeroBanner extends StatelessWidget {
                 Text(
                   'Featured',
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: const Color(0xFFFFB3A6),
+                        color: scheme.primary,
                         fontWeight: FontWeight.w800,
                       ),
                 ),
@@ -159,14 +164,14 @@ class _HeroBanner extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Colors.white,
+                        color: scheme.onSurface,
                         fontWeight: FontWeight.w900,
                       ),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   '${movie.runtime} min  •  ${FirebaseAuth.instance.currentUser?.email ?? 'Cinema member'}',
-                  style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: scheme.onSurfaceVariant, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 16),
                 CinemaButton(
@@ -178,7 +183,7 @@ class _HeroBanner extends StatelessWidget {
                 ),
               ],
             ),
-          ), 
+          ),
         ],
       ),
     );

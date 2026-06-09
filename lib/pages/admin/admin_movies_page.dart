@@ -11,7 +11,11 @@ class AdminMoviesPage extends AdminCollectionPage {
             AdminField.text('runtime', number: true, required: true),
             AdminField.text('posterUrl', required: true),
             AdminField.text('trailerUrl'),
-            AdminField.text('status', required: true),
+            AdminField.options(
+              'status',
+              required: true,
+              options: ['NOW_SHOWING', 'COMING_SOON'],
+            ),
             AdminField.date('releaseDate'),
           ],
           statusField: 'status',

@@ -11,6 +11,7 @@ import 'pages/movie_list_page.dart';
 import 'pages/register_page.dart';
 import 'pages/ticket_history_page.dart';
 import 'services/admin_service.dart';
+import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,48 +21,34 @@ Future<void> main() async {
   runApp(const CineBookingApp());
 }
 
-class CineBookingApp extends StatelessWidget {
+class CineBookingApp extends StatefulWidget {
   const CineBookingApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFFE5383B),
-      brightness: Brightness.dark,
-    );
+  State<CineBookingApp> createState() => _CineBookingAppState();
+}
 
+class _CineBookingAppState extends State<CineBookingApp> {
+  ThemeMode _themeMode = ThemeMode.dark;
+
+  void _toggleTheme() {
+    setState(() {
+      _themeMode = _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: _themeMode,
       title: 'CineBooking',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: colorScheme,
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFF07070A),
-        fontFamily: 'Roboto',
-        appBarTheme: const AppBarTheme(
-          centerTitle: false,
-          backgroundColor: Color(0xFF0D0D10),
-          foregroundColor: Colors.white,
-          elevation: 0,
-        ),
-        cardTheme: CardThemeData(
-          elevation: 0,
-          color: const Color(0xFF17171B),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: const Color(0xFF18181D),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xFF303038)),
-          ),
-        ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      home: AuthGate(
+        onToggleTheme: _toggleTheme,
+        themeMode: _themeMode,
       ),
-      home: const AuthGate(),
       routes: {
         LoginPage.routeName: (_) => const LoginPage(),
         RegisterPage.routeName: (_) => const RegisterPage(),
@@ -75,7 +62,14 @@ class CineBookingApp extends StatelessWidget {
 }
 
 class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
+  const AuthGate({
+    super.key,
+    required this.onToggleTheme,
+    required this.themeMode,
+  });
+
+  final VoidCallback onToggleTheme;
+  final ThemeMode themeMode;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +83,10 @@ class AuthGate extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
-          return const AppShell();
+          return AppShell(
+            onToggleTheme: onToggleTheme,
+            themeMode: themeMode,
+          );
         }
 
         return const LoginPage();
@@ -99,7 +96,14 @@ class AuthGate extends StatelessWidget {
 }
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  const AppShell({
+    super.key,
+    required this.onToggleTheme,
+    required this.themeMode,
+  });
+
+  final VoidCallback onToggleTheme;
+  final ThemeMode themeMode;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -139,25 +143,25 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return FutureBuilder<bool>(
       future: _isAdmin,
       builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
-      }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-      final isAdmin = snapshot.data == true;
-
-      if (isAdmin) {
-        return const AdminDashboardPage(showAppBar: true);
-      }
+        final isAdmin = snapshot.data == true;
         final pages = <Widget>[
           ..._basePages,
+          if (isAdmin) const AdminDashboardPage(showAppBar: false),
         ];
         final titles = <String>[
           ..._baseTitles,
+          if (isAdmin) 'Admin',
         ];
         final destinations = <NavigationDestination>[
           const NavigationDestination(
@@ -180,6 +184,12 @@ class _AppShellState extends State<AppShell> {
             selectedIcon: Icon(Icons.info),
             label: 'About',
           ),
+          if (isAdmin)
+            const NavigationDestination(
+              icon: Icon(Icons.admin_panel_settings_outlined),
+              selectedIcon: Icon(Icons.admin_panel_settings),
+              label: 'Admin',
+            ),
         ];
 
         final safeIndex = _index >= pages.length ? pages.length - 1 : _index;
@@ -194,6 +204,13 @@ class _AppShellState extends State<AppShell> {
             title: Text(titles[safeIndex]),
             actions: [
               IconButton(
+                tooltip: 'Sáng/Tối',
+                icon: Icon(
+                  widget.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
+                ),
+                onPressed: widget.onToggleTheme,
+              ),
+              IconButton(
                 onPressed: () => FirebaseAuth.instance.signOut(),
                 icon: const Icon(Icons.logout),
                 tooltip: 'Đăng xuất',
@@ -202,8 +219,8 @@ class _AppShellState extends State<AppShell> {
           ),
           body: IndexedStack(index: safeIndex, children: pages),
           bottomNavigationBar: NavigationBar(
-            backgroundColor: const Color(0xFF101014),
-            indicatorColor: const Color(0xFFE5383B),
+            backgroundColor: scheme.surface,
+            indicatorColor: scheme.primary,
             selectedIndex: safeIndex,
             onDestinationSelected: (value) => setState(() => _index = value),
             destinations: destinations,

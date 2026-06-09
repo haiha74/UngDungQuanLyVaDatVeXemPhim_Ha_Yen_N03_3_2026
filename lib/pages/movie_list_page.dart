@@ -21,8 +21,9 @@ class _MovieListPageState extends State<MovieListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: AppBackground(
         child: StreamBuilder<List<Movie>>(
           stream: _service.watchMovies(),
@@ -46,22 +47,22 @@ class _MovieListPageState extends State<MovieListPage> {
                   ),
                 ),
                 if (sourceMovies.isEmpty)
-                  const SliverFillRemaining(
+                  SliverFillRemaining(
                     child: Center(
                       child: Padding(
-                        padding: EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(24),
                         child: Text(
                           'Chưa có phim. Vui lòng thêm phim trong Admin.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w700),
+                          style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 16, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ),
                   )
                 else if (movies.isEmpty)
-                  const SliverFillRemaining(
+                  SliverFillRemaining(
                     child: Center(
-                      child: Text('Không tìm thấy phim phù hợp.', style: TextStyle(color: Colors.white70)),
+                      child: Text('Không tìm thấy phim phù hợp.', style: TextStyle(color: scheme.onSurfaceVariant)),
                     ),
                   )
                 else

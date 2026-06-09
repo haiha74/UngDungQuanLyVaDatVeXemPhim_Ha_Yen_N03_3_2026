@@ -75,8 +75,9 @@ class _TicketHistoryPageState extends State<TicketHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: AppBackground(
         child: FutureBuilder<List<_HistoryEntry>>(
           future: _history,
@@ -92,12 +93,12 @@ class _TicketHistoryPageState extends State<TicketHistoryPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.error_outline, size: 42, color: Colors.white70),
+                      Icon(Icons.error_outline, size: 42, color: scheme.onSurfaceVariant),
                       const SizedBox(height: 12),
                       Text(
                         'Không thể tải lịch sử: ${snapshot.error}',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white70),
+                        style: TextStyle(color: scheme.onSurfaceVariant),
                       ),
                       const SizedBox(height: 12),
                       CinemaButton(label: 'Tải lại', icon: Icons.refresh, onPressed: _refresh),
@@ -113,20 +114,20 @@ class _TicketHistoryPageState extends State<TicketHistoryPage> {
                 onRefresh: _refresh,
                 child: ListView(
                   padding: const EdgeInsets.all(24),
-                  children: const [
-                    SizedBox(height: 120),
-                    Icon(Icons.confirmation_number_outlined, size: 56, color: Colors.white54),
-                    SizedBox(height: 12),
+                  children: [
+                    const SizedBox(height: 120),
+                    Icon(Icons.confirmation_number_outlined, size: 56, color: scheme.onSurfaceVariant),
+                    const SizedBox(height: 12),
                     Text(
                       'Bạn chưa có vé nào.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: scheme.onSurface),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
                       'Sau khi thanh toán thành công, vé của bạn sẽ xuất hiện tại đây.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white60),
+                      style: TextStyle(color: scheme.onSurfaceVariant),
                     ),
                   ],
                 ),

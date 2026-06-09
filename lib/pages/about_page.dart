@@ -16,9 +16,9 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final adminService = AdminService();
+    final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: AppBackground(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -47,9 +47,9 @@ class AboutPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: const Color(0xFF17171B),
+                color: scheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF2B2B31)),
+                border: Border.all(color: scheme.outline),
               ),
               child: const Column(
                 children: [
@@ -83,15 +83,16 @@ class _ProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final name = user?.displayName ?? 'Cinema member';
     final email = user?.email ?? 'No email';
+    final scheme = Theme.of(context).colorScheme;
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(colors: [Color(0xFF2A1115), Color(0xFF17171B)]),
-        border: Border.all(color: const Color(0xFF3A2427)),
+        gradient: LinearGradient(colors: [scheme.primaryContainer, scheme.surfaceContainerHighest]),
+        border: Border.all(color: scheme.outline),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.35), blurRadius: 24, offset: const Offset(0, 12)),
+          BoxShadow(color: scheme.shadow.withValues(alpha: 0.22), blurRadius: 24, offset: const Offset(0, 12)),
         ],
       ),
       child: Row(
@@ -101,19 +102,19 @@ class _ProfileCard extends StatelessWidget {
             height: 68,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: const LinearGradient(colors: [Color(0xFFE5383B), Color(0xFFFF6B35)]),
-              boxShadow: [BoxShadow(color: const Color(0xFFE5383B).withValues(alpha: 0.35), blurRadius: 20)],
+              gradient: LinearGradient(colors: [scheme.primary, scheme.secondary]),
+              boxShadow: [BoxShadow(color: scheme.primary.withValues(alpha: 0.3), blurRadius: 20)],
             ),
-            child: const Icon(Icons.person, color: Colors.white, size: 34),
+            child: Icon(Icons.person, color: scheme.onPrimary, size: 34),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.w900)),
+                Text(name, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: scheme.onSurface, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 4),
-                Text(email, style: const TextStyle(color: Colors.white60)),
+                Text(email, style: TextStyle(color: scheme.onSurfaceVariant)),
               ],
             ),
           ),
@@ -136,20 +137,22 @@ class _AboutRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: const Color(0xFFFF6B35)),
+          Icon(icon, color: scheme.primary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                Text(title, style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 2),
-                Text(body, style: const TextStyle(color: Colors.white60)),
+                Text(body, style: TextStyle(color: scheme.onSurfaceVariant)),
               ],
             ),
           ),

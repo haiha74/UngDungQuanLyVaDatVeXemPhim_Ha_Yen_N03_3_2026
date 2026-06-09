@@ -101,10 +101,10 @@ class _BookingPageState extends State<BookingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final total = widget.showtime.basePrice * _selectedSeatIds.length;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
       appBar: AppBar(title: const Text('Choose seats')),
       body: AppBackground(
         child: FutureBuilder<_SeatMapData>(
@@ -131,12 +131,12 @@ class _BookingPageState extends State<BookingPage> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-                    gradient: const LinearGradient(colors: [Color(0xFF34343B), Color(0xFF111116)]),
+                    gradient: LinearGradient(colors: [scheme.surfaceContainerHighest, scheme.surface]),
                     boxShadow: [
-                      BoxShadow(color: const Color(0xFFE5383B).withValues(alpha: 0.22), blurRadius: 28),
+                      BoxShadow(color: scheme.primary.withValues(alpha: 0.22), blurRadius: 28),
                     ],
                   ),
-                  child: const Text('SCREEN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, letterSpacing: 1.2)),
+                  child: Text('SCREEN', style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w900, letterSpacing: 1.2)),
                 ),
                 const SizedBox(height: 20),
                 _SeatGrid(
@@ -160,17 +160,17 @@ class _BookingPageState extends State<BookingPage> {
                   duration: const Duration(milliseconds: 220),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF17171B),
+                    color: scheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: const Color(0xFF2B2B31)),
+                    border: Border.all(color: scheme.outline),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Selected seats', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                      Text('Selected seats', style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w900)),
                       const SizedBox(height: 10),
                       if (selectedSeats.isEmpty)
-                        const Text('Tap seats to add them to your booking.', style: TextStyle(color: Colors.white60))
+                        Text('Tap seats to add them to your booking.', style: TextStyle(color: scheme.onSurfaceVariant))
                       else
                         Wrap(
                           spacing: 8,
@@ -179,8 +179,8 @@ class _BookingPageState extends State<BookingPage> {
                             for (final seat in selectedSeats)
                               Chip(
                                 label: Text(seat.seatCode),
-                                backgroundColor: const Color(0xFFE5383B),
-                                labelStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                                backgroundColor: scheme.primary,
+                                labelStyle: TextStyle(color: scheme.onPrimary, fontWeight: FontWeight.w800),
                               ),
                           ],
                         ),
@@ -196,9 +196,9 @@ class _BookingPageState extends State<BookingPage> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
           decoration: BoxDecoration(
-            color: const Color(0xFF111116),
-            border: const Border(top: BorderSide(color: Color(0xFF2B2B31))),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.45), blurRadius: 20)],
+            color: scheme.surface,
+            border: Border(top: BorderSide(color: scheme.outline)),
+            boxShadow: [BoxShadow(color: scheme.shadow.withValues(alpha: 0.28), blurRadius: 20)],
           ),
           child: Row(
             children: [
@@ -207,8 +207,8 @@ class _BookingPageState extends State<BookingPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${_selectedSeatIds.length} selected', style: const TextStyle(color: Colors.white60)),
-                    Text(formatMoney(total), style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w900)),
+                    Text('${_selectedSeatIds.length} selected', style: TextStyle(color: scheme.onSurfaceVariant)),
+                    Text(formatMoney(total), style: Theme.of(context).textTheme.titleMedium?.copyWith(color: scheme.onSurface, fontWeight: FontWeight.w900)),
                   ],
                 ),
               ),
@@ -234,24 +234,26 @@ class _BookingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF17171B),
+        color: scheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFF2B2B31)),
+        border: Border.all(color: scheme.outline),
       ),
       child: Row(
         children: [
-          const Icon(Icons.local_movies, color: Color(0xFFFF6B35)),
+          Icon(Icons.local_movies, color: scheme.primary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(movie, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                Text(movie, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 4),
-                Text(detail, style: const TextStyle(color: Colors.white60)),
+                Text(detail, style: TextStyle(color: scheme.onSurfaceVariant)),
               ],
             ),
           ),
@@ -276,6 +278,7 @@ class _SeatGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final sortedSeats = [...seats]..sort((a, b) {
         final rowCompare = a.rowIndex.compareTo(b.rowIndex);
         return rowCompare == 0 ? a.colIndex.compareTo(b.colIndex) : rowCompare;
@@ -298,12 +301,17 @@ class _SeatGrid extends StatelessWidget {
         final selected = selectedSeatIds.contains(seat.id);
         final isVip = seat.seatType == 'VIP';
         final color = sold
-          ? Colors.green
-          : selected
-              ? const Color(0xFFE5383B)
-              : isVip
-                  ? const Color(0xFFFFC857)
-                  : const Color(0xFF202027);
+            ? scheme.tertiary
+            : selected
+                ? scheme.primary
+                : isVip
+                    ? scheme.secondary
+                    : scheme.surfaceContainerHighest;
+        final foreground = selected
+            ? scheme.onPrimary
+            : isVip
+                ? scheme.onSecondary
+                : scheme.onSurfaceVariant;
 
         return Tooltip(
           message: seat.seatCode,
@@ -315,8 +323,8 @@ class _SeatGrid extends StatelessWidget {
               decoration: BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: selected ? const Color(0xFFFFA199) : const Color(0xFF383840)),
-                boxShadow: selected ? [BoxShadow(color: const Color(0xFFE5383B).withValues(alpha: 0.35), blurRadius: 12)] : null,
+                border: Border.all(color: selected ? scheme.primaryContainer : scheme.outline),
+                boxShadow: selected ? [BoxShadow(color: scheme.primary.withValues(alpha: 0.3), blurRadius: 12)] : null,
               ),
               child: InkWell(
                 onTap: sold ? null : () => onToggle(seat),
@@ -327,7 +335,7 @@ class _SeatGrid extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
-                      color: selected || isVip ? Colors.white : Colors.white70,
+                      color: sold ? scheme.onTertiary : foreground,
                     ),
                   ),
                 ),
@@ -345,14 +353,16 @@ class _SeatLegend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Wrap(
+    final scheme = Theme.of(context).colorScheme;
+
+    return Wrap(
       spacing: 12,
       runSpacing: 8,
       children: [
-        _LegendDot(color: Color(0xFF202027), label: 'Standard'),
-        _LegendDot(color: Color(0xFFFFC857), label: 'VIP'),
-        _LegendDot(color: Color(0xFFE5383B), label: 'Selected'),
-        _LegendDot(color: Colors.green, label: 'Sold'),
+        _LegendDot(color: scheme.surfaceContainerHighest, label: 'Standard'),
+        _LegendDot(color: scheme.secondary, label: 'VIP'),
+        _LegendDot(color: scheme.primary, label: 'Selected'),
+        _LegendDot(color: scheme.tertiary, label: 'Sold'),
       ],
     );
   }
@@ -366,6 +376,8 @@ class _LegendDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -375,11 +387,11 @@ class _LegendDot extends StatelessWidget {
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(4),
-            border: Border.all(color: const Color(0xFFD4D0C8)),
+            border: Border.all(color: scheme.outline),
           ),
         ),
         const SizedBox(width: 6),
-        Text(label, style: const TextStyle(color: Colors.white70)),
+        Text(label, style: TextStyle(color: scheme.onSurfaceVariant)),
       ],
     );
   }

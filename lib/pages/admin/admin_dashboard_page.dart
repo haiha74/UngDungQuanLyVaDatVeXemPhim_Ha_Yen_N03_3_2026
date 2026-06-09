@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/admin_service.dart';
@@ -10,7 +11,6 @@ import 'admin_rooms_page.dart';
 import 'admin_seats_page.dart';
 import 'admin_showtimes_page.dart';
 import 'admin_tickets_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({super.key, this.showAppBar = true});
@@ -36,22 +36,20 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.transparent,
       appBar: widget.showAppBar
-    ? AppBar(
-          title: const Text('Admin Dashboard'),
-          actions: [
-            IconButton(
-              tooltip: 'Đăng xuất',
-              icon: const Icon(Icons.logout),
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-              },
-            ),
-          ],
-        )
-      : null,
+          ? AppBar(
+              title: const Text('Admin Dashboard'),
+              actions: [
+                IconButton(
+                  tooltip: 'Đăng xuất',
+                  icon: const Icon(Icons.logout),
+                  onPressed: () => FirebaseAuth.instance.signOut(),
+                ),
+              ],
+            )
+          : null,
       body: AppBackground(
         child: FutureBuilder<bool>(
           future: _allowed,
@@ -61,11 +59,11 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             }
 
             if (authSnapshot.data != true) {
-              return const Center(
+              return Center(
                 child: Text(
                   'Bạn không có quyền truy cập',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: scheme.onSurface,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
@@ -77,7 +75,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               future: _counts,
               builder: (context, snapshot) {
                 final counts = snapshot.data ?? const <String, int>{};
-
                 return GridView.count(
                   padding: const EdgeInsets.all(16),
                   crossAxisCount: MediaQuery.sizeOf(context).width > 900
@@ -89,59 +86,18 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   crossAxisSpacing: 14,
                   childAspectRatio: 1.8,
                   children: [
-                    _AdminCard(
-                      title: 'Movies',
-                      count: counts['movies'],
-                      icon: Icons.movie,
-                      onTap: () => _open(context, const AdminMoviesPage()),
-                    ),
-                    _AdminCard(
-                      title: 'Showtimes',
-                      count: counts['showtimes'],
-                      icon: Icons.schedule,
-                      onTap: () => _open(context, const AdminShowtimesPage()),
-                    ),
-                    _AdminCard(
-                      title: 'Rooms',
-                      count: counts['rooms'],
-                      icon: Icons.meeting_room,
-                      onTap: () => _open(context, const AdminRoomsPage()),
-                    ),
-                    _AdminCard(
-                      title: 'Seats',
-                      count: counts['seats'],
-                      icon: Icons.event_seat,
-                      onTap: () => _open(context, const AdminSeatsPage()),
-                    ),
-                    _AdminCard(
-                      title: 'Bookings',
-                      count: counts['bookings'],
-                      icon: Icons.receipt_long,
-                      onTap: () => _open(context, const AdminBookingsPage()),
-                    ),
-                    _AdminCard(
-                      title: 'Tickets',
-                      count: counts['tickets'],
-                      icon: Icons.confirmation_number,
-                      onTap: () => _open(context, const AdminTicketsPage()),
-                    ),
-                    _AdminCard(
-                      title: 'Payments',
-                      count: counts['payments'],
-                      icon: Icons.payments,
-                      onTap: () => _open(context, const AdminPaymentsPage()),
-                    ),
+                    _AdminCard(title: 'Movies', count: counts['movies'], icon: Icons.movie, onTap: () => _open(context, const AdminMoviesPage())),
+                    _AdminCard(title: 'Showtimes', count: counts['showtimes'], icon: Icons.schedule, onTap: () => _open(context, const AdminShowtimesPage())),
+                    _AdminCard(title: 'Rooms', count: counts['rooms'], icon: Icons.meeting_room, onTap: () => _open(context, const AdminRoomsPage())),
+                    _AdminCard(title: 'Seats', count: counts['seats'], icon: Icons.event_seat, onTap: () => _open(context, const AdminSeatsPage())),
+                    _AdminCard(title: 'Bookings', count: counts['bookings'], icon: Icons.receipt_long, onTap: () => _open(context, const AdminBookingsPage())),
+                    _AdminCard(title: 'Tickets', count: counts['tickets'], icon: Icons.confirmation_number, onTap: () => _open(context, const AdminTicketsPage())),
+                    _AdminCard(title: 'Payments', count: counts['payments'], icon: Icons.payments, onTap: () => _open(context, const AdminPaymentsPage())),
                     _AdminCard(
                       title: 'Users',
                       count: counts['users'],
                       icon: Icons.people,
-                      onTap: () => _open(
-                        context,
-                        const AdminCollectionPage(
-                          collection: 'users',
-                          title: 'Users',
-                        ),
-                      ),
+                      onTap: () => _open(context, const AdminCollectionPage(collection: 'users', title: 'Users')),
                     ),
                   ],
                 );
@@ -173,6 +129,7 @@ class _AdminCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
@@ -180,13 +137,11 @@ class _AdminCard extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF231114), Color(0xFF17171B)],
-          ),
-          border: Border.all(color: const Color(0xFF34262A)),
+          color: scheme.surfaceContainerHighest,
+          border: Border.all(color: scheme.outline),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.28),
+              color: scheme.shadow.withValues(alpha: 0.18),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -194,7 +149,7 @@ class _AdminCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: const Color(0xFFFF6B35), size: 36),
+            Icon(icon, color: scheme.primary, size: 36),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
@@ -203,8 +158,8 @@ class _AdminCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: scheme.onSurface,
                       fontWeight: FontWeight.w900,
                       fontSize: 18,
                     ),
@@ -212,12 +167,12 @@ class _AdminCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     '${count ?? 0} records',
-                    style: const TextStyle(color: Colors.white60),
+                    style: TextStyle(color: scheme.onSurfaceVariant),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Colors.white54),
+            Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
           ],
         ),
       ),
@@ -226,40 +181,35 @@ class _AdminCard extends StatelessWidget {
 }
 
 class AdminField {
-  const AdminField.text(
-    this.name, {
-    this.label,
-    this.required = false,
-    this.number = false,
-  })  : sourceCollection = null,
+  const AdminField.text(this.name, {this.label, this.required = false, this.number = false})
+      : sourceCollection = null,
         sourceLabelField = null,
+        options = null,
         type = 'text';
 
-  const AdminField.dropdown(
-    this.name, {
-    required this.sourceCollection,
-    required this.sourceLabelField,
-    this.label,
-    this.required = true,
-  })  : number = false,
+  const AdminField.dropdown(this.name, {required this.sourceCollection, required this.sourceLabelField, this.label, this.required = true})
+      : number = false,
+        options = null,
         type = 'dropdown';
 
-  const AdminField.date(
-    this.name, {
-    this.label,
-    this.required = false,
-  })  : number = false,
+  const AdminField.options(this.name, {required this.options, this.label, this.required = true})
+      : number = false,
         sourceCollection = null,
         sourceLabelField = null,
+        type = 'options';
+
+  const AdminField.date(this.name, {this.label, this.required = false})
+      : number = false,
+        sourceCollection = null,
+        sourceLabelField = null,
+        options = null,
         type = 'date';
 
-  const AdminField.dateTime(
-    this.name, {
-    this.label,
-    this.required = false,
-  })  : number = false,
+  const AdminField.dateTime(this.name, {this.label, this.required = false})
+      : number = false,
         sourceCollection = null,
         sourceLabelField = null,
+        options = null,
         type = 'dateTime';
 
   final String name;
@@ -268,14 +218,12 @@ class AdminField {
   final bool number;
   final String? sourceCollection;
   final String? sourceLabelField;
+  final List<String>? options;
   final String type;
 }
 
 class AdminReference {
-  const AdminReference({
-    required this.collection,
-    required this.labelField,
-  });
+  const AdminReference({required this.collection, required this.labelField});
 
   final String collection;
   final String labelField;
@@ -307,8 +255,8 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
@@ -327,10 +275,7 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
               padding: const EdgeInsets.all(16),
               child: TextField(
                 onChanged: (value) => setState(() => _query = value),
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Search',
-                ),
+                decoration: const InputDecoration(prefixIcon: Icon(Icons.search), hintText: 'Search'),
               ),
             ),
             Expanded(
@@ -340,13 +285,9 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
-
                   if (snapshot.hasError) {
                     return Center(
-                      child: Text(
-                        'Error: ${snapshot.error}',
-                        style: const TextStyle(color: Colors.white70),
-                      ),
+                      child: Text('Error: ${snapshot.error}', style: TextStyle(color: scheme.onSurfaceVariant)),
                     );
                   }
 
@@ -356,34 +297,23 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
                   }).toList();
 
                   if (docs.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        'No data',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    );
+                    return Center(child: Text('No data', style: TextStyle(color: scheme.onSurfaceVariant)));
                   }
 
                   return ListView.separated(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                     itemCount: docs.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 10),
+                    separatorBuilder: (context, index) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
                       final doc = docs[index];
-
                       return _AdminDocCard(
                         id: doc.id,
                         data: doc.data(),
                         references: widget.references,
                         statusField: widget.statusField,
-                        onEdit: widget.fields.isEmpty
-                            ? null
-                            : () => _openForm(id: doc.id, data: doc.data()),
+                        onEdit: widget.fields.isEmpty ? null : () => _openForm(id: doc.id, data: doc.data()),
                         onDelete: () => _delete(doc.id),
-                        onStatus: widget.statusField == null
-                            ? null
-                            : (value) => _updateStatus(doc.id, value),
+                        onStatus: widget.statusField == null ? null : (value) => _updateStatus(doc.id, value),
                       );
                     },
                   );
@@ -396,17 +326,12 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
     );
   }
 
-  Future<void> _openForm({
-    String? id,
-    Map<String, dynamic>? data,
-  }) async {
-    final entityName = widget.title.endsWith('s')
-        ? widget.title.substring(0, widget.title.length - 1)
-        : widget.title;
-
+  Future<void> _openForm({String? id, Map<String, dynamic>? data}) async {
+    final scheme = Theme.of(context).colorScheme;
+    final entityName = widget.title.endsWith('s') ? widget.title.substring(0, widget.title.length - 1) : widget.title;
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.62),
+      barrierColor: scheme.scrim.withValues(alpha: 0.62),
       builder: (_) => _AdminFormDialog(
         fields: widget.fields,
         initial: data ?? const {},
@@ -414,7 +339,6 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
         submitLabel: id == null ? 'Create' : 'Save',
       ),
     );
-
     if (result == null) return;
 
     try {
@@ -437,18 +361,11 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
         title: const Text('Confirm delete'),
         content: Text('Delete ${widget.collection}/$id?'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Delete')),
         ],
       ),
     );
-
     if (ok != true) return;
 
     try {
@@ -461,11 +378,7 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
 
   Future<void> _updateStatus(String id, String status) async {
     try {
-      await _service.updateDocument(
-        widget.collection,
-        id,
-        {widget.statusField!: status},
-      );
+      await _service.updateDocument(widget.collection, id, {widget.statusField!: status});
       _snack('Status updated');
     } catch (error) {
       _snack('Status update failed: $error');
@@ -474,9 +387,7 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
 
   void _snack(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 }
 
@@ -501,70 +412,36 @@ class _AdminDocCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF17171B),
+        color: scheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF2B2B31)),
+        border: Border.all(color: scheme.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            id,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
+          Text(id, style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w900)),
           const SizedBox(height: 8),
           for (final entry in data.entries.take(10))
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
-              child: _FieldLine(
-                field: entry.key,
-                value: entry.value,
-                reference: references[entry.key],
-              ),
+              child: _FieldLine(field: entry.key, value: entry.value, reference: references[entry.key]),
             ),
           const SizedBox(height: 10),
           Wrap(
             spacing: 8,
             children: [
-              if (onEdit != null)
-                OutlinedButton.icon(
-                  onPressed: onEdit,
-                  icon: const Icon(Icons.edit),
-                  label: const Text('Edit'),
-                ),
+              if (onEdit != null) OutlinedButton.icon(onPressed: onEdit, icon: const Icon(Icons.edit), label: const Text('Edit')),
               if (statusField != null)
                 PopupMenuButton<String>(
                   onSelected: onStatus,
-                  itemBuilder: (_) => [
-                    'ACTIVE',
-                    'INACTIVE',
-                    'OPEN',
-                    'CANCELLED',
-                    'PENDING',
-                    'PAID',
-                    'ISSUED',
-                    'CHECKED_IN',
-                    'FAILED',
-                    'SUCCESS',
-                  ]
-                      .map((s) => PopupMenuItem(value: s, child: Text(s)))
-                      .toList(),
-                  child: const OutlinedButton(
-                    onPressed: null,
-                    child: Text('Update status'),
-                  ),
+                  itemBuilder: (_) => ['NOW_SHOWING', 'COMING_SOON'].map((s) => PopupMenuItem(value: s, child: Text(s))).toList(),
+                  child: const OutlinedButton(onPressed: null, child: Text('Update status')),
                 ),
-              OutlinedButton.icon(
-                onPressed: onDelete,
-                icon: const Icon(Icons.delete),
-                label: const Text('Delete'),
-              ),
+              OutlinedButton.icon(onPressed: onDelete, icon: const Icon(Icons.delete), label: const Text('Delete')),
             ],
           ),
         ],
@@ -574,11 +451,7 @@ class _AdminDocCard extends StatelessWidget {
 }
 
 class _FieldLine extends StatelessWidget {
-  const _FieldLine({
-    required this.field,
-    required this.value,
-    this.reference,
-  });
+  const _FieldLine({required this.field, required this.value, this.reference});
 
   final String field;
   final Object? value;
@@ -586,56 +459,18 @@ class _FieldLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     if (reference != null && value is String && (value as String).isNotEmpty) {
       return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        future: FirebaseFirestore.instance
-            .collection(reference!.collection)
-            .doc(value as String)
-            .get(),
+        future: FirebaseFirestore.instance.collection(reference!.collection).doc(value as String).get(),
         builder: (context, snapshot) {
           final data = snapshot.data?.data();
-          final label =
-              data?[reference!.labelField] as String? ?? value.toString();
-
-          return _LineText(field: field, value: '$label ($value)');
+          final label = data?[reference!.labelField] as String? ?? value.toString();
+          return Text('$field: $label ($value)', maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: scheme.onSurfaceVariant));
         },
       );
     }
-
-    return _LineText(field: field, value: _displayValue(value));
-  }
-
-  String _displayValue(Object? value) {
-    if (value is Timestamp) {
-      final date = value.toDate();
-      return '${date.day.toString().padLeft(2, '0')}/'
-          '${date.month.toString().padLeft(2, '0')}/'
-          '${date.year} '
-          '${date.hour.toString().padLeft(2, '0')}:'
-          '${date.minute.toString().padLeft(2, '0')}';
-    }
-
-    return value.toString();
-  }
-}
-
-class _LineText extends StatelessWidget {
-  const _LineText({
-    required this.field,
-    required this.value,
-  });
-
-  final String field;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '$field: $value',
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(color: Colors.white70),
-    );
+    return Text('$field: $value', maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(color: scheme.onSurfaceVariant));
   }
 }
 
@@ -663,16 +498,10 @@ class _AdminFormDialogState extends State<_AdminFormDialog> {
   @override
   void initState() {
     super.initState();
-
     _controllers = {
-      for (final field in widget.fields.where(
-        (field) => field.type == 'text',
-      ))
-        field.name: TextEditingController(
-          text: widget.initial[field.name]?.toString() ?? '',
-        ),
+      for (final field in widget.fields.where((field) => !{'dropdown', 'options'}.contains(field.type)))
+        field.name: TextEditingController(text: widget.initial[field.name]?.toString() ?? ''),
     };
-
     for (final field in widget.fields) {
       _values[field.name] = widget.initial[field.name];
     }
@@ -683,278 +512,105 @@ class _AdminFormDialogState extends State<_AdminFormDialog> {
     for (final controller in _controllers.values) {
       controller.dispose();
     }
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
-      backgroundColor: Colors.transparent,
+      backgroundColor: scheme.surfaceContainerHighest,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 700, maxHeight: 720),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: const Color(0xFF1C1D25).withValues(alpha: 0.96),
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: const Color(0xFF3A3B48)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.5),
-                blurRadius: 34,
-                offset: const Offset(0, 18),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(22),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _dialogHeader(context),
-                Flexible(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final twoColumns = constraints.maxWidth >= 560;
-
-                        return Wrap(
-                          spacing: 12,
-                          runSpacing: 14,
-                          children: [
-                            for (final field in widget.fields)
-                              SizedBox(
-                                width: twoColumns && !_isWideField(field)
-                                    ? (constraints.maxWidth - 12) / 2
-                                    : constraints.maxWidth,
-                                child: _buildField(field),
-                              ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _dialogHeader(context),
+            Flexible(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final twoColumns = constraints.maxWidth >= 560;
+                    return Wrap(
+                      spacing: 12,
+                      runSpacing: 14,
+                      children: [
+                        for (final field in widget.fields)
+                          SizedBox(
+                            width: twoColumns && !_isWideField(field) ? (constraints.maxWidth - 12) / 2 : constraints.maxWidth,
+                            child: _field(field),
+                          ),
+                      ],
+                    );
+                  },
                 ),
-                _dialogFooter(context),
-              ],
+              ),
             ),
-          ),
+            _dialogFooter(context),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildField(AdminField field) {
-    if (field.type == 'dropdown') {
-      return _dropdownField(field);
-    }
-
-    if (field.type == 'date' || field.type == 'dateTime') {
-      return _dateTimeField(field);
-    }
-
-    return _textField(field);
-  }
-
   Widget _dialogHeader(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFF30313B))),
-      ),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: scheme.outline))),
       child: Row(
         children: [
           Expanded(
             child: Text(
               widget.title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                  ),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: scheme.onSurface, fontWeight: FontWeight.w900),
             ),
           ),
-          IconButton.filledTonal(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close),
-            tooltip: 'Close',
-          ),
+          IconButton.filledTonal(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close), tooltip: 'Close'),
         ],
       ),
     );
   }
 
   Widget _dialogFooter(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
-      decoration: const BoxDecoration(
-        color: Color(0xFF23242C),
-        border: Border(top: BorderSide(color: Color(0xFF30313B))),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        border: Border(top: BorderSide(color: scheme.outline)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          OutlinedButton(
-            onPressed: () => Navigator.pop(context),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-            child: const Text('Cancel'),
-          ),
+          OutlinedButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
           const SizedBox(width: 12),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              gradient: const LinearGradient(
-                colors: [Color(0xFF75E4D0), Color(0xFF6767FF)],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF6767FF).withValues(alpha: 0.28),
-                  blurRadius: 18,
-                ),
-              ],
-            ),
-            child: FilledButton(
-              onPressed: _save,
-              style: FilledButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                foregroundColor: const Color(0xFF0B0D12),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              child: Text(
-                widget.submitLabel,
-                style: const TextStyle(fontWeight: FontWeight.w900),
-              ),
-            ),
-          ),
+          FilledButton(onPressed: _save, child: Text(widget.submitLabel)),
         ],
       ),
     );
+  }
+
+  Widget _field(AdminField field) {
+    if (field.type == 'dropdown') return _dropdownField(field);
+    if (field.type == 'options') return _optionsField(field);
+    return _textField(field);
   }
 
   Widget _textField(AdminField field) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _FieldLabel(
-          text: field.label ?? _labelFor(field.name),
-          required: field.required,
-        ),
+        _FieldLabel(text: field.label ?? _labelFor(field.name), required: field.required),
         const SizedBox(height: 7),
         TextField(
           controller: _controllers[field.name],
-          keyboardType:
-              field.number ? TextInputType.number : TextInputType.text,
+          keyboardType: field.number ? TextInputType.number : TextInputType.text,
           minLines: field.name == 'description' ? 3 : 1,
           maxLines: field.name == 'description' ? 5 : 1,
-          decoration: InputDecoration(
-            hintText: _hintFor(field.name),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 15,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _dateTimeField(AdminField field) {
-    final value = _values[field.name];
-    DateTime? selectedDate;
-
-    if (value is Timestamp) {
-      selectedDate = value.toDate();
-    } else if (value is DateTime) {
-      selectedDate = value;
-    }
-
-    final displayText = selectedDate == null
-        ? field.type == 'dateTime'
-            ? 'Chọn ngày và giờ'
-            : 'Chọn ngày'
-        : field.type == 'dateTime'
-            ? _formatDateTime(selectedDate)
-            : _formatDate(selectedDate);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _FieldLabel(
-          text: field.label ?? _labelFor(field.name),
-          required: field.required,
-        ),
-        const SizedBox(height: 7),
-        InkWell(
-          borderRadius: BorderRadius.circular(14),
-          onTap: () async {
-            final initialDate = selectedDate ?? DateTime.now();
-
-            final pickedDate = await showDatePicker(
-              context: context,
-              initialDate: initialDate,
-              firstDate: DateTime(2020),
-              lastDate: DateTime(2035),
-            );
-
-            if (pickedDate == null) return;
-
-            DateTime result = DateTime(
-              pickedDate.year,
-              pickedDate.month,
-              pickedDate.day,
-            );
-
-            if (field.type == 'dateTime') {
-              final pickedTime = await showTimePicker(
-                context: context,
-                initialTime: selectedDate == null
-                    ? TimeOfDay.now()
-                    : TimeOfDay.fromDateTime(selectedDate),
-              );
-
-              if (pickedTime == null) return;
-
-              result = DateTime(
-                pickedDate.year,
-                pickedDate.month,
-                pickedDate.day,
-                pickedTime.hour,
-                pickedTime.minute,
-              );
-            }
-
-            setState(() {
-              _values[field.name] = Timestamp.fromDate(result);
-            });
-          },
-          child: InputDecorator(
-            decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.calendar_month),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 15,
-              ),
-            ),
-            child: Text(
-              displayText,
-              style: TextStyle(
-                color: selectedDate == null ? Colors.white54 : Colors.white,
-              ),
-            ),
-          ),
+          decoration: InputDecoration(hintText: _hintFor(field.name)),
         ),
       ],
     );
@@ -962,49 +618,25 @@ class _AdminFormDialogState extends State<_AdminFormDialog> {
 
   Widget _dropdownField(AdminField field) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: FirebaseFirestore.instance
-          .collection(field.sourceCollection!)
-          .snapshots(),
+      stream: FirebaseFirestore.instance.collection(field.sourceCollection!).snapshots(),
       builder: (context, snapshot) {
-        final docs =
-            snapshot.data?.docs ?? const <QueryDocumentSnapshot<Map<String, dynamic>>>[];
-
+        final docs = snapshot.data?.docs ?? const <QueryDocumentSnapshot<Map<String, dynamic>>>[];
         final currentValue = _values[field.name] as String?;
-        final selectedValue =
-            docs.any((doc) => doc.id == currentValue) ? currentValue : null;
-
+        final selectedValue = docs.any((doc) => doc.id == currentValue) ? currentValue : null;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _FieldLabel(
-              text: field.label ?? _labelFor(field.name),
-              required: field.required,
-            ),
+            _FieldLabel(text: field.label ?? _labelFor(field.name), required: field.required),
             const SizedBox(height: 7),
             DropdownButtonFormField<String>(
               initialValue: selectedValue,
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 15,
-                ),
-              ),
               hint: const Text('-- select --'),
               isExpanded: true,
               items: [
                 for (final doc in docs)
-                  DropdownMenuItem(
-                    value: doc.id,
-                    child: Text(
-                      doc.data()[field.sourceLabelField!] as String? ?? doc.id,
-                    ),
-                  ),
+                  DropdownMenuItem(value: doc.id, child: Text(doc.data()[field.sourceLabelField!] as String? ?? doc.id)),
               ],
-              onChanged: (value) {
-                setState(() {
-                  _values[field.name] = value;
-                });
-              },
+              onChanged: (value) => setState(() => _values[field.name] = value),
             ),
           ],
         );
@@ -1012,52 +644,47 @@ class _AdminFormDialogState extends State<_AdminFormDialog> {
     );
   }
 
+  Widget _optionsField(AdminField field) {
+    final options = field.options ?? const <String>[];
+    final currentValue = _values[field.name] as String?;
+    final selectedValue = options.contains(currentValue) ? currentValue : null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _FieldLabel(text: field.label ?? _labelFor(field.name), required: field.required),
+        const SizedBox(height: 7),
+        DropdownButtonFormField<String>(
+          initialValue: selectedValue,
+          hint: const Text('-- select --'),
+          isExpanded: true,
+          items: [
+            for (final option in options) DropdownMenuItem(value: option, child: Text(option)),
+          ],
+          onChanged: (value) => setState(() => _values[field.name] = value),
+        ),
+      ],
+    );
+  }
+
   void _save() {
     final data = <String, dynamic>{};
-
     for (final field in widget.fields) {
-      if (field.type == 'date' || field.type == 'dateTime') {
+      if ({'dropdown', 'options'}.contains(field.type)) {
         final value = _values[field.name];
-
-        if (field.required && value == null) return;
-
-        if (value != null) {
-          data[field.name] = value;
-        }
-      } else if (field.type == 'dropdown') {
-        final value = _values[field.name];
-
-        if (field.required && (value == null || value.toString().isEmpty)) {
-          return;
-        }
-
-        if (value != null) {
-          data[field.name] = value;
-        }
-      } else {
-        final text = _controllers[field.name]?.text.trim() ?? '';
-
-        if (field.required && text.isEmpty) return;
-
-        if (text.isEmpty) continue;
-
-        data[field.name] = field.number ? num.tryParse(text) ?? text : text;
+        if (field.required && (value == null || value.toString().isEmpty)) return;
+        if (value != null) data[field.name] = value;
+        continue;
       }
+      final text = _controllers[field.name]?.text.trim() ?? '';
+      if (field.required && text.isEmpty) return;
+      if (text.isEmpty) continue;
+      data[field.name] = field.number ? num.tryParse(text) ?? text : text;
     }
-
     Navigator.pop(context, data);
   }
 
   bool _isWideField(AdminField field) {
-    return {
-      'title',
-      'posterUrl',
-      'trailerUrl',
-      'description',
-      'roomName',
-      'screenType',
-      'basePrice',
-    }.contains(field.name);
+    return {'title', 'posterUrl', 'trailerUrl', 'description', 'roomName', 'screenType', 'basePrice'}.contains(field.name);
   }
 
   String _labelFor(String name) {
@@ -1071,15 +698,13 @@ class _AdminFormDialogState extends State<_AdminFormDialog> {
       'movieId': 'Movie',
       'roomId': 'Room',
       'startTime': 'Start time',
-      'endTime': 'End time',
-      'releaseDate': 'Release date',
+      'endTime': 'End time (optional)',
       'basePrice': 'Base price',
       'roomName': 'Room name',
       'screenType': 'Screen type',
       'totalRows': 'Total rows',
       'seatsPerRow': 'Seats per row',
     };
-
     return labels[name] ?? name;
   }
 
@@ -1088,52 +713,30 @@ class _AdminFormDialogState extends State<_AdminFormDialog> {
       'posterUrl': 'https://...',
       'trailerUrl': 'https://www.youtube.com/embed/xxxx',
       'runtime': '120',
-      'status': 'NOW_SHOWING',
+      'startTime': '2026-01-31T19:00:00',
+      'endTime': '2026-01-31T21:00:00',
       'basePrice': '70000',
       'screenType': '2D',
     };
-
     return hints[name];
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')}/'
-        '${date.month.toString().padLeft(2, '0')}/'
-        '${date.year}';
-  }
-
-  String _formatDateTime(DateTime date) {
-    return '${_formatDate(date)} '
-        '${date.hour.toString().padLeft(2, '0')}:'
-        '${date.minute.toString().padLeft(2, '0')}';
   }
 }
 
 class _FieldLabel extends StatelessWidget {
-  const _FieldLabel({
-    required this.text,
-    required this.required,
-  });
+  const _FieldLabel({required this.text, required this.required});
 
   final String text;
   final bool required;
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return RichText(
       text: TextSpan(
         text: text,
-        style: const TextStyle(
-          color: Color(0xFFC8C8D0),
-          fontWeight: FontWeight.w800,
-          fontSize: 13,
-        ),
+        style: TextStyle(color: scheme.onSurfaceVariant, fontWeight: FontWeight.w800, fontSize: 13),
         children: [
-          if (required)
-            const TextSpan(
-              text: ' *',
-              style: TextStyle(color: Color(0xFFFF6B6B)),
-            ),
+          if (required) TextSpan(text: ' *', style: TextStyle(color: scheme.error)),
         ],
       ),
     );

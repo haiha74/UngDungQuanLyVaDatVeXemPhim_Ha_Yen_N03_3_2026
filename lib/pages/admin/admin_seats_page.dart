@@ -30,7 +30,6 @@ class _AdminSeatsPageState extends State<AdminSeatsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       appBar: AppBar(title: const Text('Seats')),
       body: AppBackground(
         child: ListView(
@@ -149,17 +148,21 @@ class _ControlPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF17171B),
+        color: scheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFF2B2B31)),
+        border: Border.all(color: scheme.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Generate seats by room', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 18)),
+          Text(
+            'Generate seats by room',
+            style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w900, fontSize: 18),
+          ),
           const SizedBox(height: 14),
           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
             stream: FirebaseFirestore.instance.collection('rooms').snapshots(),
@@ -229,12 +232,13 @@ class _SeatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final selectedRoomId = roomId;
     if (selectedRoomId == null || selectedRoomId.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Text('Choose a room to view seats.', style: TextStyle(color: Colors.white70)),
+          padding: const EdgeInsets.all(24),
+          child: Text('Choose a room to view seats.', style: TextStyle(color: scheme.onSurfaceVariant)),
         ),
       );
     }
@@ -249,7 +253,7 @@ class _SeatList extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}', style: const TextStyle(color: Colors.white70));
+          return Text('Error: ${snapshot.error}', style: TextStyle(color: scheme.onSurfaceVariant));
         }
         final docs = [...?snapshot.data?.docs]
           ..sort((a, b) {
@@ -260,18 +264,18 @@ class _SeatList extends StatelessWidget {
             return ((aData['colIndex'] as num?)?.toInt() ?? 0).compareTo((bData['colIndex'] as num?)?.toInt() ?? 0);
           });
         if (docs.isEmpty) {
-          return const Padding(
-            padding: EdgeInsets.all(24),
-            child: Text('No seats for this room.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text('No seats for this room.', textAlign: TextAlign.center, style: TextStyle(color: scheme.onSurfaceVariant)),
           );
         }
 
         return Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF17171B),
+            color: scheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: const Color(0xFF2B2B31)),
+            border: Border.all(color: scheme.outline),
           ),
           child: Wrap(
             spacing: 8,
@@ -281,8 +285,8 @@ class _SeatList extends StatelessWidget {
                 Chip(
                   label: Text(doc.data()['seatCode'] as String? ?? doc.id),
                   avatar: const Icon(Icons.event_seat, size: 16),
-                  backgroundColor: const Color(0xFF202027),
-                  labelStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                  backgroundColor: scheme.surface,
+                  labelStyle: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w700),
                 ),
             ],
           ),

@@ -28,12 +28,13 @@ class TicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.35),
+            color: scheme.shadow.withValues(alpha: 0.22),
             blurRadius: 22,
             offset: const Offset(0, 12),
           ),
@@ -45,9 +46,7 @@ class TicketCard extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [Color(0xFFE5383B), Color(0xFF7F1117)]),
-            ),
+            color: scheme.primary,
             child: Row(
               children: [
                 Expanded(
@@ -56,7 +55,7 @@ class TicketCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
+                          color: scheme.onPrimary,
                           fontWeight: FontWeight.w900,
                         ),
                   ),
@@ -65,10 +64,10 @@ class TicketCard extends StatelessWidget {
                   width: 54,
                   height: 54,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.16),
+                    color: scheme.onPrimary.withValues(alpha: 0.16),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.qr_code_2, color: Colors.white, size: 34),
+                  child: Icon(Icons.qr_code_2, color: scheme.onPrimary, size: 34),
                 ),
               ],
             ),
@@ -76,7 +75,7 @@ class TicketCard extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            color: const Color(0xFF17171B),
+            color: scheme.surfaceContainerHighest,
             child: Column(
               children: [
                 _Row(label: 'Booking', value: bookingCode),
@@ -104,16 +103,17 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 7),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(width: 82, child: Text(label, style: const TextStyle(color: Colors.white54))),
+          SizedBox(width: 82, child: Text(label, style: TextStyle(color: scheme.onSurfaceVariant))),
           Expanded(
             child: Text(
               value.isEmpty ? '-' : value,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+              style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w700),
             ),
           ),
         ],

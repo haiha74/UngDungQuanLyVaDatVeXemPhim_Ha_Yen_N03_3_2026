@@ -11,12 +11,10 @@ class AdminShowtimesPage extends AdminCollectionPage {
             AdminField.dateTime('startTime', required: true),
             AdminField.dateTime('endTime', required: true),
             AdminField.text('basePrice', number: true, required: true),
-            AdminField.text('status', required: true),
           ],
           references: const {
             'movieId': AdminReference(collection: 'movies', labelField: 'title'),
             'roomId': AdminReference(collection: 'rooms', labelField: 'roomName'),
           },
-          statusField: 'status',
         );
 }

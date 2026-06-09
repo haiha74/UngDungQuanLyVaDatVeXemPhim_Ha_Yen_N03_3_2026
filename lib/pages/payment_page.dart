@@ -72,7 +72,6 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     final paidBooking = _paidBooking;
     return Scaffold(
-      backgroundColor: Colors.transparent,
       appBar: AppBar(title: Text(paidBooking == null ? 'Payment' : 'Ticket')),
       body: AppBackground(
         child: ListView(
@@ -135,20 +134,22 @@ class _OrderSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFF17171B),
+        color: scheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF2B2B31)),
+        border: Border.all(color: scheme.outline),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(movie.title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.w900)),
+          Text(movie.title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: scheme.onSurface, fontWeight: FontWeight.w900)),
           const SizedBox(height: 8),
-          Text('${formatDateTime(showtime.startTime)} • ${room?.roomName ?? 'Room'}', style: const TextStyle(color: Colors.white60)),
-          const Divider(height: 26, color: Color(0xFF2B2B31)),
+          Text('${formatDateTime(showtime.startTime)} • ${room?.roomName ?? 'Room'}', style: TextStyle(color: scheme.onSurfaceVariant)),
+          Divider(height: 26, color: scheme.outline),
           _SummaryRow(label: 'Booking', value: booking.bookingCode),
           _SummaryRow(label: 'Seats', value: booking.items.map((item) => item.seatCode).join(', ')),
           _SummaryRow(label: 'Total', value: formatMoney(booking.totalAmount)),
@@ -171,6 +172,8 @@ class _PaymentMethodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: InkWell(
@@ -180,30 +183,33 @@ class _PaymentMethodCard extends StatelessWidget {
           duration: const Duration(milliseconds: 220),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: selected ? const Color(0xFF2B1114) : const Color(0xFF17171B),
+            color: selected ? scheme.primaryContainer : scheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: selected ? const Color(0xFFE5383B) : const Color(0xFF2B2B31), width: selected ? 1.6 : 1),
-            boxShadow: selected ? [BoxShadow(color: const Color(0xFFE5383B).withValues(alpha: 0.24), blurRadius: 20)] : null,
+            border: Border.all(color: selected ? scheme.primary : scheme.outline, width: selected ? 1.6 : 1),
+            boxShadow: selected ? [BoxShadow(color: scheme.primary.withValues(alpha: 0.24), blurRadius: 20)] : null,
           ),
           child: Row(
             children: [
               AnimatedScale(
                 scale: selected ? 1.1 : 1,
                 duration: const Duration(milliseconds: 180),
-                child: Icon(Icons.account_balance_wallet_outlined, color: selected ? const Color(0xFFFF6B35) : Colors.white70),
+                child: Icon(Icons.account_balance_wallet_outlined, color: selected ? scheme.onPrimaryContainer : scheme.onSurfaceVariant),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(method.name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                    Text(method.name, style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 3),
-                    Text(method.code, style: const TextStyle(color: Colors.white54)),
+                    Text(method.code, style: TextStyle(color: scheme.onSurfaceVariant)),
                   ],
                 ),
               ),
-              Icon(selected ? Icons.radio_button_checked : Icons.radio_button_unchecked, color: selected ? const Color(0xFFFF6B35) : Colors.white38),
+              Icon(
+                selected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                color: selected ? scheme.onPrimaryContainer : scheme.onSurfaceVariant,
+              ),
             ],
           ),
         ),
@@ -220,13 +226,15 @@ class _SummaryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(width: 92, child: Text(label, style: const TextStyle(color: Colors.white54))),
-          Expanded(child: Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800))),
+          SizedBox(width: 92, child: Text(label, style: TextStyle(color: scheme.onSurfaceVariant))),
+          Expanded(child: Text(value, style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w800))),
         ],
       ),
     );
@@ -246,14 +254,16 @@ class _TicketSuccess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Icon(Icons.verified, color: Theme.of(context).colorScheme.primary),
+            Icon(Icons.verified, color: scheme.primary),
             const SizedBox(width: 8),
-            Text('Payment confirmed', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.w900)),
+            Text('Payment confirmed', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: scheme.onSurface, fontWeight: FontWeight.w900)),
           ],
         ),
         const SizedBox(height: 14),

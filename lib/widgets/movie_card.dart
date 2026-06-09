@@ -14,6 +14,8 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -32,10 +34,10 @@ class MovieCard extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: const Color(0xFF262626),
-                        child: const Icon(
+                        color: scheme.surfaceContainerHighest,
+                        child: Icon(
                           Icons.local_movies,
-                          color: Colors.white,
+                          color: scheme.onSurfaceVariant,
                           size: 42,
                         ),
                       );
@@ -62,14 +64,14 @@ class MovieCard extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.black54,
+                            color: scheme.onSurfaceVariant,
                           ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       '${movie.runtime} phút • ${movie.status}',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.black54,
+                            color: scheme.onSurfaceVariant,
                             fontWeight: FontWeight.w600,
                           ),
                     ),

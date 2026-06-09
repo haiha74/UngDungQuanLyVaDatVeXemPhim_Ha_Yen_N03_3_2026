@@ -25,7 +25,9 @@ class _CinemaButtonState extends State<CinemaButton> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final enabled = widget.onPressed != null && !widget.loading;
+    final foreground = enabled ? scheme.onPrimary : scheme.onSurfaceVariant;
     final button = GestureDetector(
       onTapDown: enabled ? (_) => setState(() => _pressed = true) : null,
       onTapCancel: enabled ? () => setState(() => _pressed = false) : null,
@@ -45,36 +47,35 @@ class _CinemaButtonState extends State<CinemaButton> {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
+            color: enabled ? scheme.primary : scheme.surfaceContainerHighest,
+            border: Border.all(color: enabled ? scheme.primary : scheme.outline),
             boxShadow: enabled
                 ? [
                     BoxShadow(
-                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.35),
+                      color: scheme.shadow.withValues(alpha: 0.24),
                       blurRadius: 18,
                       offset: const Offset(0, 8),
                     ),
                   ]
                 : null,
-            gradient: enabled
-                ? const LinearGradient(colors: [Color(0xFFE5383B), Color(0xFFFF6B35)])
-                : const LinearGradient(colors: [Color(0xFF343438), Color(0xFF2A2A2E)]),
           ),
           child: widget.loading
-              ? const SizedBox(
+              ? SizedBox(
                   width: 20,
                   height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: foreground),
                 )
               : Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (widget.icon != null) ...[
-                      Icon(widget.icon, color: Colors.white, size: 20),
+                      Icon(widget.icon, color: foreground, size: 20),
                       const SizedBox(width: 8),
                     ],
                     Text(
                       widget.label,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                      style: TextStyle(color: foreground, fontWeight: FontWeight.w800),
                     ),
                   ],
                 ),

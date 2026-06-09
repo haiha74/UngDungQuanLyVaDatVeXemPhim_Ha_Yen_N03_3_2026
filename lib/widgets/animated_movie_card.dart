@@ -23,6 +23,7 @@ class _AnimatedMovieCardState extends State<AnimatedMovieCard> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return MouseRegion(
       onEnter: (_) => setState(() => _active = true),
       onExit: (_) => setState(() => _active = false),
@@ -39,12 +40,12 @@ class _AnimatedMovieCardState extends State<AnimatedMovieCard> {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 220),
             decoration: BoxDecoration(
-              color: const Color(0xFF18181D),
+              color: scheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: _active ? const Color(0xFFE5383B) : const Color(0xFF2B2B31)),
+              border: Border.all(color: _active ? scheme.primary : scheme.outline),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: _active ? 0.45 : 0.28),
+                  color: scheme.shadow.withValues(alpha: _active ? 0.28 : 0.16),
                   blurRadius: _active ? 24 : 14,
                   offset: const Offset(0, 10),
                 ),
@@ -53,7 +54,7 @@ class _AnimatedMovieCardState extends State<AnimatedMovieCard> {
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: widget.onTap,
-              splashColor: const Color(0xFFE5383B).withValues(alpha: 0.18),
+              splashColor: scheme.primary.withValues(alpha: 0.18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -65,8 +66,8 @@ class _AnimatedMovieCardState extends State<AnimatedMovieCard> {
                         width: double.infinity,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) => Container(
-                          color: const Color(0xFF2A2A30),
-                          child: const Icon(Icons.local_movies, color: Colors.white54, size: 44),
+                          color: scheme.surfaceContainerHighest,
+                          child: Icon(Icons.local_movies, color: scheme.onSurfaceVariant, size: 44),
                         ),
                       ),
                     ),
@@ -81,14 +82,14 @@ class _AnimatedMovieCardState extends State<AnimatedMovieCard> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                color: Colors.white,
+                                color: scheme.onSurface,
                                 fontWeight: FontWeight.w900,
                               ),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           '${widget.movie.runtime} min',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white60),
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
                         ),
                       ],
                     ),

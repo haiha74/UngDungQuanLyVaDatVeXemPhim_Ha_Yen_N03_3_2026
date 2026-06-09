@@ -40,8 +40,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
       appBar: AppBar(title: Text(widget.movie.title)),
       body: AppBackground(
         child: ListView(
@@ -60,7 +61,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
             const SizedBox(height: 16),
             Text(
               widget.movie.description,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white70, height: 1.45),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: scheme.onSurfaceVariant, height: 1.45),
             ),
             const SizedBox(height: 24),
             const SectionTitle(title: 'Showtimes'),
@@ -73,10 +74,10 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                 }
                 final rows = snapshot.data ?? const <_ShowtimeRow>[];
                 if (rows.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Text('No open showtimes for this movie.', style: TextStyle(color: Colors.white70)),
+                      padding: const EdgeInsets.all(24),
+                      child: Text('No open showtimes for this movie.', style: TextStyle(color: scheme.onSurfaceVariant)),
                     ),
                   );
                 }
@@ -112,12 +113,14 @@ class _PosterHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Container(
       height: 430,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.45), blurRadius: 28, offset: const Offset(0, 16)),
+          BoxShadow(color: scheme.shadow.withValues(alpha: 0.3), blurRadius: 28, offset: const Offset(0, 16)),
         ],
       ),
       clipBehavior: Clip.antiAlias,
@@ -130,17 +133,20 @@ class _PosterHeader extends StatelessWidget {
               movie.posterUrl,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => Container(
-                color: const Color(0xFF202026),
-                child: const Icon(Icons.local_movies, color: Colors.white54, size: 60),
+                color: scheme.surfaceContainerHighest,
+                child: Icon(Icons.local_movies, color: scheme.onSurfaceVariant, size: 60),
               ),
             ),
           ),
-          const DecoratedBox(
+          DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Color(0xEE050506)],
+                colors: [
+                  scheme.scrim.withValues(alpha: 0),
+                  scheme.scrim.withValues(alpha: 0.78),
+                ],
               ),
             ),
           ),
@@ -152,7 +158,7 @@ class _PosterHeader extends StatelessWidget {
               movie.title,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w900),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: scheme.onSurface, fontWeight: FontWeight.w900),
             ),
           ),
         ],
@@ -169,13 +175,15 @@ class _ShowtimeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 220),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF17171B),
+        color: scheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFF2B2B31)),
+        border: Border.all(color: scheme.outline),
       ),
       child: Row(
         children: [
@@ -183,20 +191,22 @@ class _ShowtimeCard extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: const Color(0xFFE5383B).withValues(alpha: 0.16),
+              color: scheme.primaryContainer,
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Icon(Icons.theaters, color: Color(0xFFFF6B35)),
+            child: Icon(Icons.theaters, color: scheme.onPrimaryContainer),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(formatDateTime(row.showtime.startTime), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800)),
+                Text(formatDateTime(row.showtime.startTime), style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 4),
-                Text('${row.room?.roomName ?? 'Room'} • ${row.room?.screenType ?? '2D'} • ${formatMoney(row.showtime.basePrice)}',
-                    style: const TextStyle(color: Colors.white60)),
+                Text(
+                  '${row.room?.roomName ?? 'Room'} • ${row.room?.screenType ?? '2D'} • ${formatMoney(row.showtime.basePrice)}',
+                  style: TextStyle(color: scheme.onSurfaceVariant),
+                ),
               ],
             ),
           ),
@@ -215,11 +225,13 @@ class _InfoPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Chip(
-      backgroundColor: const Color(0xFF1F1F25),
-      avatar: Icon(icon, size: 18, color: const Color(0xFFFF6B35)),
-      label: Text(label, style: const TextStyle(color: Colors.white)),
-      side: const BorderSide(color: Color(0xFF34343B)),
+      backgroundColor: scheme.surfaceContainerHighest,
+      avatar: Icon(icon, size: 18, color: scheme.primary),
+      label: Text(label, style: TextStyle(color: scheme.onSurface)),
+      side: BorderSide(color: scheme.outline),
     );
   }
 }
