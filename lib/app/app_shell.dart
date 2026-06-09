@@ -63,56 +63,48 @@ class _AppShellState extends State<AppShell> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: Center(child: CircularProgressIndicator()),
           );
         }
 
         final isAdmin = snapshot.data == true;
 
+        if (isAdmin) {
+          return const AdminDashboardPage(showAppBar: true);
+        }
+
         final pages = <Widget>[
           ..._basePages,
-          if (isAdmin)
-            const AdminDashboardPage(showAppBar: false),
         ];
 
         final titles = <String>[
           ..._baseTitles,
-          if (isAdmin) 'Admin',
         ];
 
-        final destinations = <NavigationDestination>[
-          const NavigationDestination(
+        const destinations = <NavigationDestination>[
+          NavigationDestination(
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
-          const NavigationDestination(
+          NavigationDestination(
             icon: Icon(Icons.movie_outlined),
             selectedIcon: Icon(Icons.movie),
             label: 'Movies',
           ),
-          const NavigationDestination(
+          NavigationDestination(
             icon: Icon(Icons.confirmation_number_outlined),
             selectedIcon: Icon(Icons.confirmation_number),
             label: 'Lịch sử',
           ),
-          const NavigationDestination(
+          NavigationDestination(
             icon: Icon(Icons.info_outline),
             selectedIcon: Icon(Icons.info),
             label: 'About',
           ),
-          if (isAdmin)
-            const NavigationDestination(
-              icon: Icon(Icons.admin_panel_settings_outlined),
-              selectedIcon: Icon(Icons.admin_panel_settings),
-              label: 'Admin',
-            ),
         ];
 
-        final safeIndex =
-            _index >= pages.length ? pages.length - 1 : _index;
+        final safeIndex = _index >= pages.length ? pages.length - 1 : _index;
 
         return Scaffold(
           appBar: AppBar(
@@ -128,8 +120,7 @@ class _AppShellState extends State<AppShell> {
                 onPressed: widget.onToggleTheme,
               ),
               IconButton(
-                onPressed: () =>
-                    FirebaseAuth.instance.signOut(),
+                onPressed: () => FirebaseAuth.instance.signOut(),
                 icon: const Icon(Icons.logout),
                 tooltip: 'Đăng xuất',
               ),
