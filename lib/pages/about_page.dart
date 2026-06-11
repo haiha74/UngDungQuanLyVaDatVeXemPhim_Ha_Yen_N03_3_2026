@@ -8,9 +8,10 @@ import '../widgets/section_title.dart';
 import 'admin/admin_dashboard_page.dart';
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+  const AboutPage({super.key, this.showAppBar = false});
 
   static const routeName = '/about';
+  final bool showAppBar;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class AboutPage extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      appBar: showAppBar ? AppBar(title: const Text('Tôi')) : null,
       body: AppBackground(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),

@@ -38,7 +38,7 @@ class _AppShellState extends State<AppShell> {
     'CineBooking',
     'Movies',
     'Lịch sử',
-    'About',
+    'Tôi',
   ];
 
   @override
@@ -68,18 +68,12 @@ class _AppShellState extends State<AppShell> {
         }
 
         final isAdmin = snapshot.data == true;
-
         if (isAdmin) {
           return const AdminDashboardPage(showAppBar: true);
         }
 
-        final pages = <Widget>[
-          ..._basePages,
-        ];
-
-        final titles = <String>[
-          ..._baseTitles,
-        ];
+        const pages = _basePages;
+        const titles = _baseTitles;
 
         const destinations = <NavigationDestination>[
           NavigationDestination(
@@ -98,9 +92,9 @@ class _AppShellState extends State<AppShell> {
             label: 'Lịch sử',
           ),
           NavigationDestination(
-            icon: Icon(Icons.info_outline),
-            selectedIcon: Icon(Icons.info),
-            label: 'About',
+            icon: Icon(Icons.account_circle_outlined),
+            selectedIcon: Icon(Icons.account_circle),
+            label: 'Tôi',
           ),
         ];
 
@@ -113,9 +107,7 @@ class _AppShellState extends State<AppShell> {
               IconButton(
                 tooltip: 'Sáng/Tối',
                 icon: Icon(
-                  widget.themeMode == ThemeMode.dark
-                      ? Icons.light_mode
-                      : Icons.dark_mode,
+                  widget.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
                 ),
                 onPressed: widget.onToggleTheme,
               ),
