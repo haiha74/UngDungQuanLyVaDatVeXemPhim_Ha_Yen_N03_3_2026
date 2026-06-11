@@ -46,7 +46,10 @@ class _CineBookingAppState extends State<CineBookingApp> {
         AdminDashboardPage.routeName: (_) => const AdminDashboardPage(),
         MovieListPage.routeName: (_) => const MovieListPage(),
         TicketHistoryPage.routeName: (_) => const TicketHistoryPage(),
-        AboutPage.routeName: (_) => const AboutPage(),
+        AboutPage.routeName: (_) => AboutPage(
+          onToggleTheme: _toggleTheme,
+          themeMode: _themeMode,
+        ),
       },
     );
   }

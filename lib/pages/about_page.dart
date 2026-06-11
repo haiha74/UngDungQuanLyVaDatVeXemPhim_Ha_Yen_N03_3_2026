@@ -8,16 +8,25 @@ import '../widgets/section_title.dart';
 import 'admin/admin_dashboard_page.dart';
 
 class AboutPage extends StatelessWidget {
-  const AboutPage({super.key, this.showAppBar = false});
+  const AboutPage({
+    super.key,
+    this.showAppBar = false,
+    required this.onToggleTheme,
+    required this.themeMode,
+  });
 
   static const routeName = '/about';
+
   final bool showAppBar;
+  final VoidCallback onToggleTheme;
+  final ThemeMode themeMode;
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final adminService = AdminService();
     final scheme = Theme.of(context).colorScheme;
+
 
     return Scaffold(
       appBar: showAppBar ? AppBar(title: const Text('Tôi')) : null,
@@ -62,7 +71,30 @@ class AboutPage extends StatelessWidget {
                 ],
               ),
             ),
+
+
             const SizedBox(height: 18),
+
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: scheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: scheme.outline),
+              ),
+              child: ListTile(
+                leading: const Icon(Icons.dark_mode),
+                title: const Text('Chế độ giao diện'),
+                subtitle: const Text('Chuyển đổi sáng / tối'),
+                trailing: Switch(
+                  value: themeMode == ThemeMode.dark,
+                  onChanged: (_) => onToggleTheme(),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
             CinemaButton(
               label: 'Đăng xuất',
               icon: Icons.logout,

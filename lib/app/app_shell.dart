@@ -27,13 +27,6 @@ class _AppShellState extends State<AppShell> {
   int _index = 0;
   late Future<bool> _isAdmin;
 
-  static const _basePages = [
-    HomePage(),
-    MovieListPage(),
-    TicketHistoryPage(),
-    AboutPage(),
-  ];
-
   static const _baseTitles = [
     'CineBooking',
     'Movies',
@@ -68,56 +61,27 @@ class _AppShellState extends State<AppShell> {
         }
 
         final isAdmin = snapshot.data == true;
+
         if (isAdmin) {
           return const AdminDashboardPage(showAppBar: true);
         }
 
-        const pages = _basePages;
-        const titles = _baseTitles;
-
-        const destinations = <NavigationDestination>[
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
+        final pages = <Widget>[
+          HomePage(
+            onToggleTheme: widget.onToggleTheme,
+            themeMode: widget.themeMode,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.movie_outlined),
-            selectedIcon: Icon(Icons.movie),
-            label: 'Movies',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.confirmation_number_outlined),
-            selectedIcon: Icon(Icons.confirmation_number),
-            label: 'Lịch sử',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.account_circle_outlined),
-            selectedIcon: Icon(Icons.account_circle),
-            label: 'Tôi',
+          const MovieListPage(),
+          const TicketHistoryPage(),
+          AboutPage(
+            onToggleTheme: widget.onToggleTheme,
+            themeMode: widget.themeMode,
           ),
         ];
 
         final safeIndex = _index >= pages.length ? pages.length - 1 : _index;
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text(titles[safeIndex]),
-            actions: [
-              IconButton(
-                tooltip: 'Sáng/Tối',
-                icon: Icon(
-                  widget.themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode,
-                ),
-                onPressed: widget.onToggleTheme,
-              ),
-              IconButton(
-                onPressed: () => FirebaseAuth.instance.signOut(),
-                icon: const Icon(Icons.logout),
-                tooltip: 'Đăng xuất',
-              ),
-            ],
-          ),
           body: IndexedStack(
             index: safeIndex,
             children: pages,
@@ -131,7 +95,28 @@ class _AppShellState extends State<AppShell> {
                 _index = value;
               });
             },
-            destinations: destinations,
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.movie_outlined),
+                selectedIcon: Icon(Icons.movie),
+                label: 'Movies',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.confirmation_number_outlined),
+                selectedIcon: Icon(Icons.confirmation_number),
+                label: 'Lịch sử',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.account_circle_outlined),
+                selectedIcon: Icon(Icons.account_circle),
+                label: 'Tôi',
+              ),
+            ],
           ),
         );
       },

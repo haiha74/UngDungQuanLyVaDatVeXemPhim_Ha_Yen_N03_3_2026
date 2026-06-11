@@ -10,7 +10,14 @@ import 'movie_detail_page.dart';
 import 'movie_list_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({
+    super.key,
+    required this.onToggleTheme,
+    required this.themeMode,
+  });
+
+  final VoidCallback onToggleTheme;
+  final ThemeMode themeMode;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -159,7 +166,13 @@ class _HomePageState extends State<HomePage> {
 
   void _openProfile() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const AboutPage(showAppBar: true)),
+        MaterialPageRoute(
+        builder: (_) => AboutPage(
+          showAppBar: true,
+          onToggleTheme: widget.onToggleTheme,
+          themeMode: widget.themeMode,
+        ),
+      ),
     );
   }
 
