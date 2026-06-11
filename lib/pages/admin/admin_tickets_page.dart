@@ -5,6 +5,7 @@ class AdminTicketsPage extends AdminCollectionPage {
       : super(
           collection: 'tickets',
           title: 'Tickets',
+          titleField: 'ticketCode',
           statusField: 'status',
         );
 }

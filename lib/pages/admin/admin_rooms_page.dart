@@ -5,6 +5,7 @@ class AdminRoomsPage extends AdminCollectionPage {
       : super(
           collection: 'rooms',
           title: 'Rooms',
+          titleField: 'roomName',
           fields: const [
             AdminField.text('roomName', required: true),
             AdminField.text('screenType', required: true),

@@ -24,7 +24,16 @@ class _MovieListPageState extends State<MovieListPage> {
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      body: AppBackground(
+    appBar: AppBar(
+      title: const Text('Movies'),
+      leading: Navigator.canPop(context)
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          : null,
+    ),
+    body: AppBackground(
         child: StreamBuilder<List<Movie>>(
           stream: _service.watchMovies(),
           initialData: MovieService.fallbackMovies,

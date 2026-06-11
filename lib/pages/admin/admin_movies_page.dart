@@ -5,6 +5,7 @@ class AdminMoviesPage extends AdminCollectionPage {
       : super(
           collection: 'movies',
           title: 'Movies',
+          titleField: 'title',
           fields: const [
             AdminField.text('title', required: true),
             AdminField.text('description'),

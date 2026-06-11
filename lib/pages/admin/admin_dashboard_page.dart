@@ -237,6 +237,7 @@ class AdminCollectionPage extends StatefulWidget {
     this.fields = const [],
     this.statusField,
     this.references = const {},
+    this.titleField,
   });
 
   final String collection;
@@ -244,6 +245,7 @@ class AdminCollectionPage extends StatefulWidget {
   final List<AdminField> fields;
   final String? statusField;
   final Map<String, AdminReference> references;
+  final String? titleField;
 
   @override
   State<AdminCollectionPage> createState() => _AdminCollectionPageState();
@@ -309,6 +311,7 @@ class _AdminCollectionPageState extends State<AdminCollectionPage> {
                       return _AdminDocCard(
                         id: doc.id,
                         data: doc.data(),
+                        titleField: widget.titleField,
                         references: widget.references,
                         statusField: widget.statusField,
                         onEdit: widget.fields.isEmpty ? null : () => _openForm(id: doc.id, data: doc.data()),
@@ -396,6 +399,7 @@ class _AdminDocCard extends StatelessWidget {
     required this.id,
     required this.data,
     required this.references,
+    required this.titleField,
     this.onEdit,
     required this.onDelete,
     this.statusField,
@@ -405,6 +409,7 @@ class _AdminDocCard extends StatelessWidget {
   final String id;
   final Map<String, dynamic> data;
   final Map<String, AdminReference> references;
+  final String? titleField;
   final VoidCallback? onEdit;
   final VoidCallback onDelete;
   final String? statusField;
@@ -423,7 +428,12 @@ class _AdminDocCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(id, style: TextStyle(color: scheme.onSurface, fontWeight: FontWeight.w900)),
+          _DocTitle(
+              id: id,
+              data: data,
+              titleField: titleField,
+              references: references,
+            ),
           const SizedBox(height: 8),
           for (final entry in data.entries.take(10))
             Padding(
@@ -445,6 +455,74 @@ class _AdminDocCard extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DocTitle extends StatelessWidget {
+  const _DocTitle({
+    required this.id,
+    required this.data,
+    required this.titleField,
+    required this.references,
+  });
+
+  final String id;
+  final Map<String, dynamic> data;
+  final String? titleField;
+  final Map<String, AdminReference> references;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final field = titleField;
+    final value = field == null ? null : data[field];
+
+    if (field != null && value is String && references[field] != null) {
+      final reference = references[field]!;
+
+      return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        future: FirebaseFirestore.instance
+            .collection(reference.collection)
+            .doc(value)
+            .get(),
+        builder: (context, snapshot) {
+          final refData = snapshot.data?.data();
+          final label = refData?[reference.labelField]?.toString() ?? value;
+
+          return _TitleText(text: label);
+        },
+      );
+    }
+
+    final title = value?.toString();
+
+    if (title != null && title.isNotEmpty) {
+      return _TitleText(text: title);
+    }
+
+    return _TitleText(text: id);
+  }
+}
+
+class _TitleText extends StatelessWidget {
+  const _TitleText({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return Text(
+      text,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        color: scheme.onSurface,
+        fontWeight: FontWeight.w900,
+        fontSize: 18,
       ),
     );
   }

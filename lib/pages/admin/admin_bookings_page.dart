@@ -5,6 +5,7 @@ class AdminBookingsPage extends AdminCollectionPage {
       : super(
           collection: 'bookings',
           title: 'Bookings',
+          titleField: 'movieId',
           statusField: 'status',
         );
         

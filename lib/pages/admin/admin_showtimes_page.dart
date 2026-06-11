@@ -5,6 +5,7 @@ class AdminShowtimesPage extends AdminCollectionPage {
       : super(
           collection: 'showtimes',
           title: 'Showtimes',
+          titleField: 'movieId',
           fields: const [
             AdminField.dropdown('movieId', label: 'Movie', sourceCollection: 'movies', sourceLabelField: 'title'),
             AdminField.dropdown('roomId', label: 'Room', sourceCollection: 'rooms', sourceLabelField: 'roomName'),

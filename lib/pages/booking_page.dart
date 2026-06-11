@@ -301,17 +301,13 @@ class _SeatGrid extends StatelessWidget {
         final selected = selectedSeatIds.contains(seat.id);
         final isVip = seat.seatType == 'VIP';
         final color = sold
-            ? scheme.tertiary
-            : selected
-                ? scheme.primary
-                : isVip
-                    ? scheme.secondary
-                    : scheme.surfaceContainerHighest;
-        final foreground = selected
-            ? scheme.onPrimary
+        ? Colors.green
+        : selected
+            ? Colors.red
             : isVip
-                ? scheme.onSecondary
-                : scheme.onSurfaceVariant;
+                ? Colors.amber
+                : Colors.grey.shade700;
+        final foreground = Colors.white;
 
         return Tooltip(
           message: seat.seatCode,
@@ -356,15 +352,27 @@ class _SeatLegend extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return Wrap(
-      spacing: 12,
-      runSpacing: 8,
-      children: [
-        _LegendDot(color: scheme.surfaceContainerHighest, label: 'Standard'),
-        _LegendDot(color: scheme.secondary, label: 'VIP'),
-        _LegendDot(color: scheme.primary, label: 'Selected'),
-        _LegendDot(color: scheme.tertiary, label: 'Sold'),
-      ],
-    );
+    spacing: 16,
+    runSpacing: 8,
+    children: const [
+      _LegendDot(
+        color: Colors.grey,
+        label: 'Standard',
+      ),
+      _LegendDot(
+        color: Colors.amber,
+        label: 'VIP',
+      ),
+      _LegendDot(
+        color: Colors.red,
+        label: 'Selected',
+      ),
+      _LegendDot(
+        color: Colors.green,
+        label: 'Sold',
+      ),
+    ],
+  );
   }
 }
 
