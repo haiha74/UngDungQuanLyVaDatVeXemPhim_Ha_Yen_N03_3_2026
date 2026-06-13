@@ -4,8 +4,184 @@
 ## Thành viên nhóm 
 * Nguyễn Hải Hà - 23010469
 * Vũ Thị Hải Yến - 23010421
+# Ứng dụng Quản lý và Đặt vé xem phim
 
-## Mục lục
+## 1. Giới thiệu dự án
+
+Đây là ứng dụng quản lý và đặt vé xem phim được xây dựng bằng Flutter và Firebase. Ứng dụng hỗ trợ người dùng xem danh sách phim, xem chi tiết phim, chọn suất chiếu, chọn ghế, đặt vé và thanh toán. Ngoài ra, hệ thống còn có phần quản trị dành cho Admin để quản lý phim, phòng chiếu, ghế, suất chiếu, vé và thanh toán.
+
+## 2. Thành viên nhóm
+
+| STT | Họ và tên      | Mã sinh viên | Vai trò                                                                | Tỷ lệ đóng góp |
+| --- | -------------- | ------------ | ---------------------------------------------------------------------- | -------------- |
+| 1   | Nguyễn Hải Hà  | 23010469     | Phát triển chức năng người dùng, Firebase, đặt vé, thanh toán, báo cáo | 50%            |
+| 2   | Vũ Thị Hải Yến | 23010421     | Phát triển chức năng Admin, CRUD, quản lý dữ liệu, giao diện quản trị  | 50%            |
+
+
+## 3. Công nghệ sử dụng
+
+| Công nghệ               | Mục đích                                   |
+| ----------------------- | ------------------------------------------ |
+| Flutter                 | Xây dựng giao diện ứng dụng đa nền tảng    |
+| Dart                    | Ngôn ngữ lập trình chính                   |
+| Firebase Core           | Kết nối ứng dụng Flutter với Firebase      |
+| Cloud Firestore         | Lưu trữ dữ liệu phim, vé, booking, payment |
+| Firebase Authentication | Quản lý đăng nhập và tài khoản người dùng  |
+| Material Design         | Thiết kế giao diện ứng dụng                |
+
+## 4. Chức năng chính
+
+### Người dùng
+
+* Xem danh sách phim.
+* Xem chi tiết phim.
+* Chọn suất chiếu.
+* Chọn ghế ngồi.
+* Đặt vé xem phim.
+* Thanh toán vé.
+* Xem lịch sử đặt vé.
+
+### Quản trị viên
+
+* Quản lý phim.
+* Quản lý phòng chiếu.
+* Quản lý ghế ngồi.
+* Quản lý suất chiếu.
+* Quản lý booking.
+* Quản lý thanh toán.
+* Quản lý vé.
+
+## 5. Cấu trúc thư mục
+
+```text
+UngDungQuanLyVaDatVeXemPhim_Ha_Yen_N03_3_2026/
+│
+├── android/                  # Cấu hình chạy ứng dụng trên Android
+├── ios/                      # Cấu hình chạy ứng dụng trên iOS
+├── web/                      # Cấu hình chạy ứng dụng trên Web
+├── windows/                  # Cấu hình chạy ứng dụng trên Windows
+├── macos/                    # Cấu hình chạy ứng dụng trên macOS
+├── linux/                    # Cấu hình chạy ứng dụng trên Linux
+│
+├── lib/                      # Thư mục mã nguồn chính
+│   ├── main.dart             # File khởi chạy ứng dụng
+│   ├── firebase_options.dart # Cấu hình Firebase
+│   │
+│   ├── models/               # Các class Model ánh xạ dữ liệu Firebase
+│   │   ├── movie.dart
+│   │   ├── booking.dart
+│   │   ├── payment.dart
+│   │   ├── room.dart
+│   │   ├── seat.dart
+│   │   └── showtime.dart
+│   │
+│   ├── pages/                # Các màn hình của ứng dụng
+│   │   ├── home_page.dart
+│   │   ├── movie_detail_page.dart
+│   │   ├── booking_page.dart
+│   │   ├── payment_page.dart
+│   │   ├── ticket_history_page.dart
+│   │   └── admin/            # Các màn hình quản trị
+│   │       ├── admin_dashboard_page.dart
+│   │       ├── admin_movies_page.dart
+│   │       ├── admin_rooms_page.dart
+│   │       ├── admin_seats_page.dart
+│   │       ├── admin_showtimes_page.dart
+│   │       ├── admin_bookings_page.dart
+│   │       ├── admin_payments_page.dart
+│   │       └── admin_tickets_page.dart
+│   │
+│   ├── services/             # Xử lý nghiệp vụ và thao tác Firebase
+│   │   ├── movie_service.dart
+│   │   ├── booking_service.dart
+│   │   ├── payment_service.dart
+│   │   ├── user_service.dart
+│   │   └── admin_service.dart
+│   │
+│   └── widgets/              # Các widget dùng chung
+│       ├── app_background.dart
+│       ├── cinema_button.dart
+│       ├── movie_card.dart
+│       ├── section_title.dart
+│       └── ticket_card.dart
+│
+├── test/                     # Thư mục kiểm thử
+│   └── widget_test.dart
+│
+├── pubspec.yaml              # Khai báo thư viện và cấu hình project
+├── pubspec.lock              # Thông tin phiên bản thư viện
+├── analysis_options.yaml     # Quy tắc kiểm tra code Dart
+└── README.md                 # Tài liệu mô tả project
+```
+
+## 6. Hướng dẫn cài đặt và chạy project
+
+### Bước 1: Clone project từ GitHub
+
+```bash
+git clone https://github.com/haiha74/UngDungQuanLyVaDatVeXemPhim_Ha_Yen_N03_3_2026.git
+```
+
+### Bước 2: Di chuyển vào thư mục project
+
+```bash
+cd UngDungQuanLyVaDatVeXemPhim_Ha_Yen_N03_3_2026
+```
+
+### Bước 3: Cài đặt thư viện
+
+```bash
+flutter pub get
+```
+
+### Bước 4: Kiểm tra thiết bị chạy
+
+```bash
+flutter devices
+```
+
+### Bước 5: Chạy ứng dụng
+
+Chạy trên Chrome:
+
+```bash
+flutter run -d chrome
+```
+
+Chạy trên Android Emulator:
+
+```bash
+flutter run
+```
+
+Chạy bằng web-server:
+
+```bash
+flutter run -d web-server
+```
+
+### Bước 6: Tài khoản kiểm thử
+
+### Tài khoản Admin
+Admin : admin@gmail.com / Mk : 123456
+### Tài khoản User
+User : eniuu127@gmail.com / Mk : eniuu127@ hoặc đăng ký tài khoản mới để sử dụng
+
+## 7. Firebase
+
+Project sử dụng Firebase Firestore để lưu trữ dữ liệu. Các collection chính gồm:
+
+| Collection | Chức năng                 |
+| ---------- | ------------------------- |
+| movies     | Lưu thông tin phim        |
+| rooms      | Lưu thông tin phòng chiếu |
+| seats      | Lưu thông tin ghế         |
+| showtimes  | Lưu thông tin suất chiếu  |
+| bookings   | Lưu thông tin đặt vé      |
+| payments   | Lưu thông tin thanh toán  |
+| users      | Lưu thông tin người dùng  |
+
+## Mục lục các bài tập thực hành trên lớp
 * Bài thực hành 01 
 * Bài thực hành 02
 * Bài thực hành 03
